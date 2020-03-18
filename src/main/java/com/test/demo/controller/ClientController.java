@@ -32,11 +32,12 @@ public class ClientController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ClientDTO updateClient(Principal principal, @PathVariable("id") int theId, @RequestBody ClientDTO updatedClient) {
 
         return clientService.updateClient(principal, theId, updatedClient);
     }
+
 
     @GetMapping("/delete/{id}")
     public ResultDTO deleteClient(@PathVariable("id") int theId) {
