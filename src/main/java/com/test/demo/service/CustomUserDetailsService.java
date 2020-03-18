@@ -59,7 +59,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private List<SimpleGrantedAuthority> getAuthority(Client client) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        client.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
+        Role role = client.getRole();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         return authorities;
     }
 
@@ -69,10 +70,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .setEmail(user.getEmail())
                 .setPassword(bcryptEncoder.encode(user.getPassword()))
                 .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName());
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("USER"));
-        newUser.setRoles(roles);
+                .setLastName(user.getLastName())
+                .setCnp(user.getCnp())
+                .setAddress(user.getAddress());
+        Role role = roleRepository.findByName("USER");
+        newUser.setRole(role);
         return clientRepository.save(newUser);
     }
 

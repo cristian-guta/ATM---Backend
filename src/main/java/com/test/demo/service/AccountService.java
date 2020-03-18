@@ -55,6 +55,7 @@ public class AccountService {
                     .setName(x.getName());
             accounts.add(acc);
         });
+
         return accounts.stream().collect(Collectors.toList());
     }
 

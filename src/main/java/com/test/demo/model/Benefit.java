@@ -1,24 +1,26 @@
 package com.test.demo.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Accessors(chain = true)
-@Transactional
 @Entity
-@Table(name = "role", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
-public class Role {
+@Table(name = "benefit")
+@AllArgsConstructor
+public class Benefit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
-    private String name;
-
     private String description;
+
+    public Benefit() {
+    }
 }

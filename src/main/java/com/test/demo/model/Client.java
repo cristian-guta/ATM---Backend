@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -44,11 +43,13 @@ public class Client implements Serializable {
     @NotNull
     private Boolean status = false;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "client_roles", joinColumns = {
-            @JoinColumn(name = "client_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_id")})
-    private List<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
 
     public Client() {
     }

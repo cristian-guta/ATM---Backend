@@ -50,11 +50,13 @@ public class JwtTokenUtil {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         Client client = clientRepository.findByUsername(userDetails.getUsername());
+        String role = client.getRole().getName();
         claims.put("clientId", client.getId());
         claims.put("username", client.getUsername());
         claims.put("email", client.getEmail());
         claims.put("firstName", client.getFirstName());
         claims.put("lastName", client.getLastName());
+        claims.put("userRole", role);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
