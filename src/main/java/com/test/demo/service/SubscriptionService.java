@@ -87,8 +87,6 @@ public class SubscriptionService {
 
     public ResultDTO cancelSubscription(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());
-//        Subscription subscription = client.getSubscription();
-//        subscription = null;
         client.setSubscription(null);
         clientRepository.save(client);
 
@@ -98,11 +96,11 @@ public class SubscriptionService {
     }
 
     public SubscriptionDTO createSubscription(SubscriptionDTO newSubscription) {
-
+        List<Benefit> benefits = benefitRepository.findByIdIn(newSubscription.getBenefitIds());
         Subscription subscription = new Subscription()
                 .setName(newSubscription.getName())
                 .setPrice(newSubscription.getPrice())
-                .setBenefits(newSubscription.getBenefits());
+                .setBenefits(benefits);
 
         return new SubscriptionDTO(subscriptionRepository.save(subscription));
 

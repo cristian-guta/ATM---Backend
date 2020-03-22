@@ -11,7 +11,6 @@ import java.util.List;
 
 
 @RestController
-//@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,6 +19,7 @@ public class SubscriptionDTO {
     private String name;
     private Double price;
     private List<Benefit> benefits;
+    private int[] benefitIds;
 
     public SubscriptionDTO(Subscription subscription) {
         this.id = subscription.getId();

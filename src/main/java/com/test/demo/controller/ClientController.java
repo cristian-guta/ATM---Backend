@@ -39,7 +39,7 @@ public class ClientController {
     }
 
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResultDTO deleteClient(@PathVariable("id") int theId) {
         return clientService.deactivateClient(theId);
     }

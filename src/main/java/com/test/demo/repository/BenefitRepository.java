@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BenefitRepository extends CrudRepository<Benefit, Integer> {
 
@@ -13,4 +15,6 @@ public interface BenefitRepository extends CrudRepository<Benefit, Integer> {
 
     @Query("select b from Benefit b where b.description like ?1")
     Benefit findByDescription(String description);
+
+    List<Benefit> findByIdIn(int[] ids);
 }

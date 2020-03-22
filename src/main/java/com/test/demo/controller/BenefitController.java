@@ -13,7 +13,6 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/benefits")
 public class BenefitController {
 
@@ -26,8 +25,8 @@ public class BenefitController {
         return benefitService.getAllBenefits();
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getBenefitsBySubscription")
+
+    @GetMapping("/subscription/{id}")
     public List<BenefitDTO> getBenefitsBySubscription(Principal principal, @PathVariable(value = "id") int subId) {
         return benefitService.getBenefitsBySubscription(principal, subId);
     }
