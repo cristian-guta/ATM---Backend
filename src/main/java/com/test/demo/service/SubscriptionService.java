@@ -85,6 +85,16 @@ public class SubscriptionService {
 
     }
 
+    public ResultDTO activateSubscription(Principal principal, int subId) {
+
+        Client client = clientRepository.findByUsername(principal.getName());
+        client.setSubscription(subscriptionRepository.getById(subId));
+        clientRepository.save(client);
+
+        return new ResultDTO().setType("success").setMessage("Subscription activated!");
+    }
+
+
     public ResultDTO cancelSubscription(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());
         client.setSubscription(null);

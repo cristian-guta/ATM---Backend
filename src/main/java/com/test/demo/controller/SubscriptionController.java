@@ -34,6 +34,13 @@ public class SubscriptionController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @PutMapping("/activateSubscription/{id}")
+    public ResultDTO activateSubscription(Principal principal, @PathVariable(value = "id") int id){
+        return subscriptionService.activateSubscription(principal, id);
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/cancelSubscription")
     public ResultDTO cancelSubscription(Principal principal) {
         return subscriptionService.cancelSubscription(principal);
