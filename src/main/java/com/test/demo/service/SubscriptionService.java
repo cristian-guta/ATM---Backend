@@ -124,11 +124,13 @@ public class SubscriptionService {
     }
 
     public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
+        List<Benefit> benefits = benefitRepository.findByIdIn(subscriptionDTO.getBenefitIds());
+
         Subscription updateSubscription = subscriptionRepository.getById(id);
         updateSubscription.setId(subscriptionDTO.getId())
                 .setName(subscriptionDTO.getName())
                 .setPrice(subscriptionDTO.getPrice())
-                .setBenefits(subscriptionDTO.getBenefits());
+                .setBenefits(benefits);
         subscriptionRepository.save(updateSubscription);
 
         return new SubscriptionDTO(updateSubscription);

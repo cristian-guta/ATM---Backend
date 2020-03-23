@@ -32,11 +32,6 @@ public class Subscription {
     })
     private List<Benefit> benefits;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "client_id", nullable = false)
-//    @JsonBackReference
-//    private Client client;
-
     public Subscription() {
     }
 

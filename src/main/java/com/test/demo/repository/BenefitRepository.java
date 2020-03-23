@@ -17,4 +17,7 @@ public interface BenefitRepository extends CrudRepository<Benefit, Integer> {
     Benefit findByDescription(String description);
 
     List<Benefit> findByIdIn(int[] ids);
+
+    @Query("select s.benefits from Subscription s where s.id = ?1")
+    List<Benefit> findBySubscriptionId(int id);
 }

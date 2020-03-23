@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BenefitService {
@@ -59,14 +60,14 @@ public class BenefitService {
         return benefits;
     }
 
-    public List<BenefitDTO> getBenefitsBySubscription(Principal principal, int subId) {
+    public List<BenefitDTO> getBenefitsBySubscription(Principal principal, int id) {
         List<BenefitDTO> benefits = new ArrayList<>();
-        Subscription subscription = subscriptionRepository.getById(subId);
-        BenefitDTO benefitDTO = new BenefitDTO();
-        for (Benefit b : subscription.getBenefits()){
-            benefitDTO.setId(b.getId()).setDescription(b.getDescription());
-            benefits.add(benefitDTO);
-        }
-        return benefits;
+        benefitRepository.findBySubscriptionId(id).forEach(benefit -> {
+            BenefitDTO ben = new BenefitDTO().setId(benefit.getId())
+                                            .setDescription(benefit.getDescription());
+
+            benefits.add(ben);
+        });
+        return benefits.stream().distinct().collect(Collectors.toList());
     }
 }
