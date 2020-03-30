@@ -22,13 +22,36 @@ public class AccountController {
         return accountService.getAccountsByClientCnp(principal);
     }
 
+    //    @PreAuthorize("hasAdmin()")
+    @GetMapping("/getAllAccounts")
+    public List<AccountDTO> getAllAccounts(Principal principal) {
+        return accountService.getAllAccounts(principal);
+    }
+
     @PostMapping("/create")
     public AccountDTO createAccount(@RequestBody AccountDTO newAccount, Principal principal) {
         return accountService.createAccount(newAccount, principal);
+    }
+
+    @PutMapping("/update/{id}")
+    public AccountDTO updateAccount(@PathVariable(value = "id") int id, @RequestBody AccountDTO accountDTO) {
+        return accountService.updateAccount(id, accountDTO);
+    }
+
+    @PutMapping("/withdraw/{id}/{amount}")
+    public ResultDTO withdrawMoney(@PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) {
+        return accountService.withdrawMoney(accountId, amount);
+    }
+
+    @PutMapping("/deposit/{id}/{amount}")
+    public ResultDTO depositMoney(@PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) {
+        return accountService.depositMoney(accountId, amount);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResultDTO deleteAccount(@PathVariable(value = "id") int id) {
         return accountService.deleteAccount(id);
     }
+
+
 }

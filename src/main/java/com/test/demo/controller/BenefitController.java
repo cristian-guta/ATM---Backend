@@ -26,8 +26,10 @@ public class BenefitController {
     }
 
 
-    @GetMapping("/subscription/{id}")
+    @GetMapping("/bySubscription/{id}")
     public List<BenefitDTO> getBenefitsBySubscription(Principal principal, @PathVariable(value = "id") int id) {
         return benefitService.getBenefitsBySubscription(principal, id);
     }
+
+
 }

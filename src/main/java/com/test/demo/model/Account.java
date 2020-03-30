@@ -22,6 +22,9 @@ public class Account {
     @NotNull
     private Double amount;
 
+    @Column
+    private String details;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -29,10 +32,11 @@ public class Account {
     public Account() {
     }
 
-    public Account(int id, String name, Double amount, Client client) {
+    public Account(int id, String name, Double amount, String details, Client client) {
         this.id = id;
         this.name = name;
         this.amount = amount;
+        this.details = details;
         this.client = client;
     }
 }

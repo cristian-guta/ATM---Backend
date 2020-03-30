@@ -18,6 +18,6 @@ public interface BenefitRepository extends CrudRepository<Benefit, Integer> {
 
     List<Benefit> findByIdIn(int[] ids);
 
-    @Query("select s.benefits from Subscription s where s.id = ?1")
+    @Query("select s.benefits from Subscription s where s.id =?1")
     List<Benefit> findBySubscriptionId(int id);
 }

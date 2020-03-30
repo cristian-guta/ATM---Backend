@@ -80,8 +80,11 @@ public class SubscriptionService {
 
             return sub;
         } else {
+
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found!");
+//            return new SubscriptionDTO();
         }
+
 
     }
 

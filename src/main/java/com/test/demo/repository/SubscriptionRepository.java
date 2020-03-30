@@ -17,6 +17,7 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
     @Query("select s from Subscription s where s.id = ?1")
     Subscription getById(int id);
 
+    List<Subscription> findByIdIn(int [] ids);
 
 
 }
