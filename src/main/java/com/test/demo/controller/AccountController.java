@@ -22,6 +22,11 @@ public class AccountController {
         return accountService.getAccountsByClientCnp(principal);
     }
 
+    @GetMapping("/{id}")
+    public AccountDTO getAccountById(@PathVariable(value="id") int id){
+        return accountService.getAccountById(id);
+    }
+
     //    @PreAuthorize("hasAdmin()")
     @GetMapping("/getAllAccounts")
     public List<AccountDTO> getAllAccounts(Principal principal) {
@@ -53,5 +58,9 @@ public class AccountController {
         return accountService.deleteAccount(id);
     }
 
+    @PutMapping("/transfer/{senderAccountId}/{receiverAccountId}/{amount}")
+    public ResultDTO transferMoney(@PathVariable(value = "senderAccountId") int senderAccountId, @PathVariable(value = "receiverAccountId") int receiverAccountId, @PathVariable(value = "amount") Double amount) {
+        return accountService.transferMoney(senderAccountId, receiverAccountId, amount);
+    }
 
 }

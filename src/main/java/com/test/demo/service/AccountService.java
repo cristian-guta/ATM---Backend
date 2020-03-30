@@ -7,8 +7,10 @@ import com.test.demo.model.Client;
 import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -120,5 +122,35 @@ public class AccountService {
         account.setAmount(total);
         accountRepository.save(account);
         return new ResultDTO().setType("success").setMessage("Money deposed!");
+    }
+
+    public ResultDTO transferMoney(int senderAccountId, int receiverAccountId, Double amount) {
+        Account account = accountRepository.findAccountById(senderAccountId);
+        Account toSendTo = accountRepository.findAccountById(receiverAccountId);
+
+        Double senderAmount = account.getAmount() - amount;
+        account.setAmount(senderAmount);
+        accountRepository.save(account);
+
+        Double receiverAmount = toSendTo.getAmount() + amount;
+        toSendTo.setAmount(receiverAmount);
+        accountRepository.save(toSendTo);
+
+        return new ResultDTO().setType("success").setMessage("Amount successfully transfered!");
+    }
+
+    public AccountDTO getAccountById(int id) {
+        Account account = accountRepository.findAccountById(id);
+        if (account != null) {
+            AccountDTO acc = new AccountDTO()
+                    .setId(account.getId())
+                    .setDetails(account.getDetails())
+                    .setClient(account.getClient())
+                    .setAmount(account.getAmount())
+                    .setName(account.getName());
+            return acc;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found!");
+        }
     }
 }
