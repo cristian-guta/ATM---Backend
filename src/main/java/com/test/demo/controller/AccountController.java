@@ -6,6 +6,7 @@ import com.test.demo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -44,13 +45,13 @@ public class AccountController {
     }
 
     @PutMapping("/withdraw/{id}/{amount}")
-    public ResultDTO withdrawMoney(@PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) {
-        return accountService.withdrawMoney(accountId, amount);
+    public ResultDTO withdrawMoney(Principal principal, @PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) throws IOException  {
+        return accountService.withdrawMoney(principal, accountId, amount);
     }
 
     @PutMapping("/deposit/{id}/{amount}")
-    public ResultDTO depositMoney(@PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) {
-        return accountService.depositMoney(accountId, amount);
+    public ResultDTO depositMoney(Principal principal, @PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) throws IOException {
+        return accountService.depositMoney(principal, accountId, amount);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -59,8 +60,8 @@ public class AccountController {
     }
 
     @PutMapping("/transfer/{senderAccountId}/{receiverAccountId}/{amount}")
-    public ResultDTO transferMoney(@PathVariable(value = "senderAccountId") int senderAccountId, @PathVariable(value = "receiverAccountId") int receiverAccountId, @PathVariable(value = "amount") Double amount) {
-        return accountService.transferMoney(senderAccountId, receiverAccountId, amount);
+    public ResultDTO transferMoney(Principal principal, @PathVariable(value = "senderAccountId") int senderAccountId, @PathVariable(value = "receiverAccountId") int receiverAccountId, @PathVariable(value = "amount") Double amount) throws IOException {
+        return accountService.transferMoney(principal, senderAccountId, receiverAccountId, amount);
     }
 
 }
