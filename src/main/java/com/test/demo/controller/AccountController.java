@@ -24,7 +24,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public AccountDTO getAccountById(@PathVariable(value="id") int id){
+    public AccountDTO getAccountById(@PathVariable(value = "id") int id) {
         return accountService.getAccountById(id);
     }
 
@@ -45,7 +45,7 @@ public class AccountController {
     }
 
     @PutMapping("/withdraw/{id}/{amount}")
-    public ResultDTO withdrawMoney(Principal principal, @PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) throws IOException  {
+    public ResultDTO withdrawMoney(Principal principal, @PathVariable(value = "id") int accountId, @PathVariable(value = "amount") Double amount) throws IOException {
         return accountService.withdrawMoney(principal, accountId, amount);
     }
 

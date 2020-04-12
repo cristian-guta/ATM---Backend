@@ -1,16 +1,12 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.BenefitDTO;
-import com.test.demo.dto.SubscriptionDTO;
 import com.test.demo.model.Benefit;
-import com.test.demo.model.Client;
-import com.test.demo.model.Subscription;
 import com.test.demo.repository.BenefitRepository;
 import com.test.demo.repository.ClientRepository;
 import com.test.demo.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 import java.util.ArrayList;

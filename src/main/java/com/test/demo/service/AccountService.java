@@ -6,9 +6,7 @@ import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
-import com.test.demo.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,9 +81,13 @@ public class AccountService {
     public ResultDTO deleteAccount(int id) {
 
         Account deleteAccount = accountRepository.findAccountById(id);
-        deleteAccount.setClient(null);
-        accountRepository.delete(deleteAccount);
-        return new ResultDTO().setType("success").setMessage("Account deleted.");
+        if(deleteAccount!=null){
+            accountRepository.deleteAccountById(id);
+            return new ResultDTO().setStatus(true).setMessage("Account deleted!");
+        }
+        else{
+            return new ResultDTO().setStatus(false).setMessage("No account with this id found!");
+        }
     }
 
     public List<AccountDTO> getAllAccounts(Principal principal) {
@@ -120,7 +122,7 @@ public class AccountService {
         account.setAmount(total);
         accountRepository.save(account);
         operationService.createOperation(principal, account.getId(), 0, "deposit", amount);
-        return new ResultDTO().setType("success").setMessage("Money deposed!");
+        return new ResultDTO().setStatus(true).setMessage("Money deposed!");
     }
 
     public ResultDTO withdrawMoney(Principal principal, int accountId, Double amount) throws IOException {
@@ -129,7 +131,7 @@ public class AccountService {
         account.setAmount(total);
         accountRepository.save(account);
         operationService.createOperation(principal, account.getId(), 0, "deposit", amount);
-        return new ResultDTO().setType("success").setMessage("Money deposed!");
+        return new ResultDTO().setStatus(true).setMessage("Money deposed!");
     }
 
     public ResultDTO transferMoney(Principal principal, int senderAccountId, int receiverAccountId, Double amount) throws IOException {
@@ -144,7 +146,7 @@ public class AccountService {
         toSendTo.setAmount(receiverAmount);
         accountRepository.save(toSendTo);
         operationService.createOperation(principal, account.getId(), toSendTo.getId(), "transfer", amount);
-        return new ResultDTO().setType("success").setMessage("Amount successfully transfered!");
+        return new ResultDTO().setStatus(true).setMessage("Amount successfully transfered!");
     }
 
     public AccountDTO getAccountById(int id) {
@@ -156,6 +158,7 @@ public class AccountService {
                     .setClient(account.getClient())
                     .setAmount(account.getAmount())
                     .setName(account.getName());
+
             return acc;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found!");

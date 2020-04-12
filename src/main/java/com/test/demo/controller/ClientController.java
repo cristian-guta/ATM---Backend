@@ -18,13 +18,13 @@ public class ClientController {
     private ClientService clientService;
 
 
-//    @PreAuthorize("hasAdmin()")
+    //    @PreAuthorize("hasAdmin()")
     @GetMapping("")
     public List<ClientDTO> getAll() {
         return clientService.getAll();
     }
 
-//    @PreAuthorize("isAuthenticated")
+    //    @PreAuthorize("isAuthenticated")
     @GetMapping("/current")
     public ClientDTO getCurrentClient(Principal principal) {
         return clientService.getCurrentClient(principal);

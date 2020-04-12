@@ -28,8 +28,9 @@ public class ClientService {
     private PasswordEncoder bCryptPasswordEncoder;
     private SubscriptionRepository subscriptionRepository;
 
+
     @Autowired
-    ClientService(PasswordEncoder bCryptPasswordEncoder, ClientRepository userRepository, RoleRepository roleRepository, SubscriptionRepository subscriptionRepository) {
+    public ClientService(PasswordEncoder bCryptPasswordEncoder, ClientRepository userRepository, RoleRepository roleRepository, SubscriptionRepository subscriptionRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.clientRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -126,7 +127,7 @@ public class ClientService {
         if (client.isPresent()) {
             client.get().setStatus(status);
             clientRepository.save(client.get());
-            return new ResultDTO().setType("success").setMessage("Successfully changed user status!");
+            return new ResultDTO().setStatus(true).setMessage("Successfully changed user status!");
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }

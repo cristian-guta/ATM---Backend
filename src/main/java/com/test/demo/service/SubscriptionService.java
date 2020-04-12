@@ -94,7 +94,7 @@ public class SubscriptionService {
         client.setSubscription(subscriptionRepository.getById(subId));
         clientRepository.save(client);
 
-        return new ResultDTO().setType("success").setMessage("Subscription activated!");
+        return new ResultDTO().setStatus(true).setMessage("Subscription activated!");
     }
 
 
@@ -103,7 +103,7 @@ public class SubscriptionService {
         client.setSubscription(null);
         clientRepository.save(client);
 
-        return new ResultDTO().setType("success").setMessage("Subscription removed from your account!");
+        return new ResultDTO().setStatus(true).setMessage("Subscription removed from your account!");
 
 
     }
@@ -123,7 +123,7 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.getById(id);
         subscriptionRepository.delete(subscription);
 
-        return new ResultDTO().setType("success").setMessage("Subscription deleted.");
+        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
     }
 
     public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
