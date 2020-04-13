@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DemoApplicationTests {
+public class AccountServiceTest {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -45,7 +45,6 @@ public class DemoApplicationTests {
 
     @Before
     public void init() {
-//        MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .build();
@@ -114,20 +113,20 @@ public class DemoApplicationTests {
 
         AccountDTO accountDTO = new AccountDTO().setAmount(242.4).setDetails("dfd").setName("fs").setId(7);
         ResultDTO resultDTO = new ResultDTO();
-        when(accountService.deleteAccount(accountDTO.getId())).thenReturn(new ResultDTO().setMessage("Success!").setStatus(true));
+        when(accountService.deleteAccount(accountDTO.getId())).thenReturn(resultDTO.setMessage("Success!").setStatus(true));
 
         accountService.deleteAccount(accountDTO.getId());
         verify(accountService, times(1)).deleteAccount(accountDTO.getId());
         verifyNoMoreInteractions(accountService);
-        assertEquals(false, resultDTO.isStatus());
+        assertEquals(true, resultDTO.isStatus());
     }
 
     @Test
-    public void deleteAccountDoesNotExist(){
-//        AccountDTO accountDTO = new AccountDTO().setAmount(242.4).setDetails("dfd").setName("fs").setId(2);
+    public void deleteAccountDoesNotExist() {
+
         ResultDTO resultDTO = new ResultDTO();
-        int id=10;
-        when(accountService.deleteAccount(10)).thenReturn(new ResultDTO().setMessage("Not found!").setStatus(false));
+        int id = 10;
+        when(accountService.deleteAccount(10)).thenReturn(resultDTO.setMessage("Not found!").setStatus(false));
 
         accountService.deleteAccount(id);
         verify(accountService, times(1)).deleteAccount(id);

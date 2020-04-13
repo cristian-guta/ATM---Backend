@@ -28,7 +28,7 @@ public class BenefitService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    public void seedBenefits(){
+    public void seedBenefits() {
         seedBenefit(1, "Minute nationale");
         seedBenefit(2, "SMS");
         seedBenefit(3, "Apeluri video");
@@ -37,9 +37,9 @@ public class BenefitService {
         seedBenefit(6, "Roaming");
     }
 
-    private void seedBenefit(int id, String description){
+    private void seedBenefit(int id, String description) {
         Benefit benefit = benefitRepository.getById(id);
-        if(benefit == null){
+        if (benefit == null) {
             benefit = new Benefit().setId(id).setDescription(description);
             benefitRepository.save(benefit);
         }
@@ -47,10 +47,10 @@ public class BenefitService {
 
     public List<BenefitDTO> getAllBenefits() {
         List<BenefitDTO> benefits = new ArrayList<>();
-        for(Benefit ben : benefitRepository.findAll()){
+        for (Benefit ben : benefitRepository.findAll()) {
             BenefitDTO bnf = new BenefitDTO()
-                                    .setId(ben.getId())
-                                    .setDescription(ben.getDescription());
+                    .setId(ben.getId())
+                    .setDescription(ben.getDescription());
             benefits.add(bnf);
         }
         return benefits;
@@ -60,7 +60,7 @@ public class BenefitService {
         List<BenefitDTO> benefits = new ArrayList<>();
         benefitRepository.findBySubscriptionId(id).forEach(benefit -> {
             BenefitDTO ben = new BenefitDTO().setId(benefit.getId())
-                                            .setDescription(benefit.getDescription());
+                    .setDescription(benefit.getDescription());
 
             benefits.add(ben);
         });

@@ -81,11 +81,10 @@ public class AccountService {
     public ResultDTO deleteAccount(int id) {
 
         Account deleteAccount = accountRepository.findAccountById(id);
-        if(deleteAccount!=null){
+        if (deleteAccount != null) {
             accountRepository.deleteAccountById(id);
             return new ResultDTO().setStatus(true).setMessage("Account deleted!");
-        }
-        else{
+        } else {
             return new ResultDTO().setStatus(false).setMessage("No account with this id found!");
         }
     }
