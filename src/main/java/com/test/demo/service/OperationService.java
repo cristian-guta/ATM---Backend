@@ -59,7 +59,7 @@ public class OperationService {
         return operations;
     }
 
-    public ResultDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
+    public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
         LocalDate date = LocalDate.now();
         Account account = accountRepository.findAccountById(accountId);
         Account transfer = new Account();
@@ -79,12 +79,11 @@ public class OperationService {
             emailService.createPDF(operation, principal, null);
         }
         operationRepository.save(operation);
-//        return new OperationDTO()
-//                .setAccount(account)
-//                .setAmount(amount)
-//                .setDate(date)
-//                .setType(type)
-//                .setClient(client);
-        return new ResultDTO().setStatus(true).setMessage("" + date);
+        return new OperationDTO()
+                .setAccount(account)
+                .setAmount(amount)
+                .setDate(date)
+                .setType(type)
+                .setClient(client);
     }
 }

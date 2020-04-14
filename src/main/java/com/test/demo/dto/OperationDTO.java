@@ -21,7 +21,9 @@ public class OperationDTO {
     private Double amount;
     private LocalDate date;
     private Client client;
+    private ClientDTO clientDTO;
     private Account account;
+    private AccountDTO accountDTO;
 
     public OperationDTO(Operation operation){
         this.id = operation.getId();
@@ -30,6 +32,14 @@ public class OperationDTO {
         this.date = operation.getDate();
         this.client = operation.getClient();
         this.account = operation.getAccount();
+    }
+
+    public OperationDTO(String type, Double amount, LocalDate date, ClientDTO clientDTO, AccountDTO accountDTO){
+        this.type = type;
+        this.amount = amount;
+        this.date = date;
+        this.clientDTO = clientDTO;
+        this.accountDTO = accountDTO;
     }
 
 }
