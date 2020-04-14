@@ -92,32 +92,7 @@ public class EmailService {
             paragraph2.add("Current Balance: " + account.getAmount() + "\n");
         }
 
-//        Table table = new Table(3);
-//        table.addCell(new Cell().add("Nr. crt"));
-//        table.addCell(new Cell().add("Name"));
-//        table.addCell(new Cell().add("Price"));
-//        int i = 1;
-//        for (Product prod : products) {
-//            table.addCell(new Cell().add("" + i));
-//            table.addCell(new Cell().add(prod.getName()));
-//            table.addCell(new Cell().add("" + prod.getPrice()));
-//            i++;
-//        }
-
-
         document.add(paragraph2);
-
-//        Paragraph delivery = new Paragraph();
-//        delivery.add("Address: " + client.getAddress());
-//        document.add(delivery);
-//
-//        Paragraph orderDate = new Paragraph();
-//        orderDate.add("Order date: " + date);
-//        document.add(orderDate);
-//
-//        Paragraph deliveryDate = new Paragraph();
-//        deliveryDate.add("Estimated delivery time: 3 days by Posta Romana");
-//        document.add(deliveryDate);
 
         document.close();
         senderService.sendMail(DEST, client.getEmail(), client.getFirstName() + " " + client.getLastName());

@@ -1,6 +1,7 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.OperationDTO;
+import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.model.Operation;
@@ -9,7 +10,6 @@ import com.test.demo.repository.ClientRepository;
 import com.test.demo.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -59,11 +59,11 @@ public class OperationService {
         return operations;
     }
 
-    public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
+    public ResultDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
         LocalDate date = LocalDate.now();
         Account account = accountRepository.findAccountById(accountId);
         Account transfer = new Account();
-        if(transferId!=0) {
+        if (transferId != 0) {
             transfer = accountRepository.findAccountById(transferId);
         }
         Client client = clientRepository.findByUsername(principal.getName());
@@ -73,18 +73,18 @@ public class OperationService {
                 .setDate(date)
                 .setType(type)
                 .setClient(client);
-        if(type.toLowerCase()=="transfer") {
+        if (type.toLowerCase() == "transfer") {
             emailService.createPDF(operation, principal, transfer);
-        }
-        else{
+        } else {
             emailService.createPDF(operation, principal, null);
         }
         operationRepository.save(operation);
-        return new OperationDTO()
-                .setAccount(account)
-                .setAmount(amount)
-                .setDate(date)
-                .setType(type)
-                .setClient(client);
+//        return new OperationDTO()
+//                .setAccount(account)
+//                .setAmount(amount)
+//                .setDate(date)
+//                .setType(type)
+//                .setClient(client);
+        return new ResultDTO().setStatus(true).setMessage("" + date);
     }
 }

@@ -1,8 +1,7 @@
 package com.test.demo.controller;
 
 import com.test.demo.dto.OperationDTO;
-import com.test.demo.model.Account;
-import com.test.demo.model.Operation;
+import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,17 +20,17 @@ public class OperationController {
     private OperationService operationService;
 
     @GetMapping("")
-    public List<OperationDTO> getAll(Principal principal){
+    public List<OperationDTO> getAll(Principal principal) {
         return operationService.getAllOperations(principal);
     }
 
     @GetMapping("/{id}")
-    public OperationDTO getOperationById(@PathVariable(value="id") String id) throws IOException {
+    public OperationDTO getOperationById(@PathVariable(value = "id") String id) throws IOException {
         return operationService.findOperationById(id);
     }
 
     @PostMapping("/create")
-    public OperationDTO createOperation(Principal principal, @RequestParam int accountId, @RequestParam int transferId,  String type, Double amount) throws IOException {
+    public ResultDTO createOperation(Principal principal, @RequestParam int accountId, @RequestParam int transferId, String type, Double amount) throws IOException {
         return operationService.createOperation(principal, accountId, transferId, type, amount);
     }
 }
