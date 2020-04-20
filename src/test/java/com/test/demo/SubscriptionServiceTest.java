@@ -128,7 +128,7 @@ public class SubscriptionServiceTest {
     @Test
     public void updateSubscription() {
 
-        int id=3;
+        int id = 3;
 
         SubscriptionDTO subscriptionDTO = new SubscriptionDTO().setName("nume 1");
         String newMessage = "new";

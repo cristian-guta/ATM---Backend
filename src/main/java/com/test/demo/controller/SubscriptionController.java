@@ -35,7 +35,7 @@ public class SubscriptionController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/activateSubscription/{id}")
-    public ResultDTO activateSubscription(Principal principal, @PathVariable(value = "id") int id){
+    public ResultDTO activateSubscription(Principal principal, @PathVariable(value = "id") int id) {
         return subscriptionService.activateSubscription(principal, id);
     }
 

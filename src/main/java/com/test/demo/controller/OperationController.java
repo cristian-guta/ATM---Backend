@@ -1,7 +1,6 @@
 package com.test.demo.controller;
 
 import com.test.demo.dto.OperationDTO;
-import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

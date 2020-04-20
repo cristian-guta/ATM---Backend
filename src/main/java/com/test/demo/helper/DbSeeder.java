@@ -1,7 +1,6 @@
 package com.test.demo.helper;
 
 import com.test.demo.service.*;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,6 @@ package com.test.demo.service;
 
 import com.test.demo.model.Role;
 import com.test.demo.repository.RoleRepository;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

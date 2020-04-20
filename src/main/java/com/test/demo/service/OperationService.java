@@ -1,7 +1,6 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.OperationDTO;
-import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.model.Operation;

@@ -34,9 +34,10 @@ public class Operation {
 //    @JoinColumn(name = "account_id")
     private Account account;
 
-    public Operation(){}
+    public Operation() {
+    }
 
-    public Operation(int id, String type, Double amount){
+    public Operation(int id, String type, Double amount) {
         this.id = id;
         this.type = type;
         this.amount = amount;

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -25,7 +24,7 @@ public class OperationDTO {
     private Account account;
     private AccountDTO accountDTO;
 
-    public OperationDTO(Operation operation){
+    public OperationDTO(Operation operation) {
         this.id = operation.getId();
         this.type = operation.getType();
         this.amount = operation.getAmount();
@@ -34,7 +33,7 @@ public class OperationDTO {
         this.account = operation.getAccount();
     }
 
-    public OperationDTO(String type, Double amount, LocalDate date, ClientDTO clientDTO, AccountDTO accountDTO){
+    public OperationDTO(String type, Double amount, LocalDate date, ClientDTO clientDTO, AccountDTO accountDTO) {
         this.type = type;
         this.amount = amount;
         this.date = date;

@@ -1,6 +1,5 @@
 package com.test.demo.repository;
 
-import com.test.demo.model.Account;
 import com.test.demo.model.Subscription;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -17,7 +16,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
     @Query("select s from Subscription s where s.id = ?1")
     Subscription getById(int id);
 
-    List<Subscription> findByIdIn(int [] ids);
-
+    List<Subscription> findByIdIn(int[] ids);
 
 }

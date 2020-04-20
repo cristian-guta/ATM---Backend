@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface RoleRepository extends CrudRepository<Role, Integer> {
     Role findByName(String name);
 
-
 }

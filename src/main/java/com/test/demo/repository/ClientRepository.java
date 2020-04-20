@@ -18,5 +18,4 @@ public interface ClientRepository extends CrudRepository<Client, Integer> {
     @Query("select c from Client c where c.cnp = ?1")
     Client findClientByCnp(String cnp);
 
-
 }

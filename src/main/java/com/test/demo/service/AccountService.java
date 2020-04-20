@@ -7,6 +7,10 @@ import com.test.demo.model.Client;
 import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +53,31 @@ public class AccountService {
         }
     }
 
+//    public List<AccountDTO> getAllAccounts(Principal principal) {
+//        List<AccountDTO> accounts = new ArrayList<>();
+//        accountRepository.findAll().forEach(account -> {
+//            AccountDTO acc = new AccountDTO()
+//                    .setId(account.getId())
+//                    .setName(account.getName())
+//                    .setAmount(account.getAmount())
+//                    .setDetails(account.getDetails())
+//                    .setClient(account.getClient());
+//            accounts.add(acc);
+//        });
+//        return accounts;
+//    }
+
+    public List<Account> getAllAccounts(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending());
+
+        Page<Account> pagedResult = accountRepository.findAll(paging);
+
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        }
+        return new ArrayList<Account>();
+    }
+
     public List<AccountDTO> getAccountsByClientCnp(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());
         List<AccountDTO> accounts = new ArrayList<>();
@@ -87,20 +116,6 @@ public class AccountService {
         } else {
             return new ResultDTO().setStatus(false).setMessage("No account with this id found!");
         }
-    }
-
-    public List<AccountDTO> getAllAccounts(Principal principal) {
-        List<AccountDTO> accounts = new ArrayList<>();
-        accountRepository.findAll().forEach(account -> {
-            AccountDTO acc = new AccountDTO()
-                    .setId(account.getId())
-                    .setName(account.getName())
-                    .setAmount(account.getAmount())
-                    .setDetails(account.getDetails())
-                    .setClient(account.getClient());
-            accounts.add(acc);
-        });
-        return accounts;
     }
 
     public AccountDTO updateAccount(int id, AccountDTO accountDTO) {

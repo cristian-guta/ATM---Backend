@@ -42,5 +42,6 @@ public class ClientDTO {
         this.subscriptionDTO = subscriptionDTO;
     }
 
-    public ClientDTO(){}
+    public ClientDTO() {
+    }
 }
