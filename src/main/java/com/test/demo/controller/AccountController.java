@@ -2,12 +2,8 @@ package com.test.demo.controller;
 
 import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
-import com.test.demo.model.Account;
 import com.test.demo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,18 +29,9 @@ public class AccountController {
     }
 
     //    @PreAuthorize("hasAdmin()")
-//    @GetMapping("/getAllAccounts")
-//    public List<AccountDTO> getAllAccounts(Principal principal) {
-//        return accountService.getAllAccounts(principal);
-//    }
     @GetMapping("/getAllAccounts")
-    public ResponseEntity<List<Account>> getAllAccounts(
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "name") String sortBy) {
-        List<Account> list = accountService.getAllAccounts(pageNo, pageSize, sortBy);
-
-        return new ResponseEntity<List<Account>>(list, new HttpHeaders(), HttpStatus.OK);
+    public List<AccountDTO> getAllAccounts(Principal principal) {
+        return accountService.getAllAccounts(principal);
     }
 
     @PostMapping("/create")

@@ -40,6 +40,13 @@ public class SubscriptionServiceTest {
 
     private MockMvc mockMvc;
 
+    Principal principal = new Principal() {
+        @Override
+        public String getName() {
+            return "user";
+        }
+    };
+
     @Before
     public void init() {
         mockMvc = MockMvcBuilders
@@ -80,17 +87,12 @@ public class SubscriptionServiceTest {
         when(subscriptionService.getClientSubscription(principal)).thenReturn(subscriptionDTO);
 
         subscriptionService.getClientSubscription(principal);
-        assertEquals("numer1", subscriptionDTO.getName());
+        assertEquals("nume1", subscriptionDTO.getName());
     }
 
     @Test
     public void activateSubscriptionTest() {
-        Principal principal = new Principal() {
-            @Override
-            public String getName() {
-                return "user";
-            }
-        };
+
 
         int id = 1;
         ResultDTO resultDTO = new ResultDTO();
@@ -117,11 +119,11 @@ public class SubscriptionServiceTest {
     public void deleteSubscription() {
         int id = 5;
         ResultDTO resultDTO = new ResultDTO();
-        when(subscriptionService.deleteSubscription(id)).thenReturn(resultDTO.setStatus(true));
+        when(subscriptionService.deleteSubscription(id, principal)).thenReturn(resultDTO.setStatus(true));
 
-        subscriptionService.deleteSubscription(id);
+        subscriptionService.deleteSubscription(id, principal);
         assertEquals(true, resultDTO.isStatus());
-        verify(subscriptionService, times(1)).deleteSubscription(id);
+        verify(subscriptionService, times(1)).deleteSubscription(id, principal);
         verifyNoMoreInteractions(subscriptionService);
     }
 
@@ -135,7 +137,7 @@ public class SubscriptionServiceTest {
         when(subscriptionService.updateSubscription(id, subscriptionDTO)).thenReturn(subscriptionDTO.setName(newMessage));
 
         subscriptionService.updateSubscription(id, subscriptionDTO);
-        assertEquals("num3e2", subscriptionDTO.getName());
+        assertEquals("new3", subscriptionDTO.getName());
     }
 
 }

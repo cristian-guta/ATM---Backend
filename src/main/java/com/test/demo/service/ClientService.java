@@ -56,7 +56,7 @@ public class ClientService {
     }
 
     public void seedClients() {
-        seedClient(1, "admin", "Cristian", "Guta", "1234567890", "Adresa 1", "cristian.guta@domain.com", "password", false, subscriptionRepository.getById(1));
+        seedClient(1, "admin", "Cristian", "Guta", "1234567890", "Adresa 1", "cristian.guta@domain.com", "password", false, null);
         seedClient(2, "user", "Cezar", "Ionescu", "23894723894728", "Adresa 2", "cristi98feb@yahoo.com", "password", false, subscriptionRepository.getById(2));
         seedClient(3, "user1", "First", "last", "467234", "Adresa 3", "first@domain.com", "password", false, subscriptionRepository.getById(2));
     }
@@ -112,6 +112,7 @@ public class ClientService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found!");
         }
+
     }
 
     public ResultDTO deactivateClient(Integer id) {

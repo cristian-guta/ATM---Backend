@@ -53,30 +53,30 @@ public class AccountService {
         }
     }
 
-//    public List<AccountDTO> getAllAccounts(Principal principal) {
-//        List<AccountDTO> accounts = new ArrayList<>();
-//        accountRepository.findAll().forEach(account -> {
-//            AccountDTO acc = new AccountDTO()
-//                    .setId(account.getId())
-//                    .setName(account.getName())
-//                    .setAmount(account.getAmount())
-//                    .setDetails(account.getDetails())
-//                    .setClient(account.getClient());
-//            accounts.add(acc);
-//        });
-//        return accounts;
-//    }
-
-    public List<Account> getAllAccounts(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending());
-
-        Page<Account> pagedResult = accountRepository.findAll(paging);
-
-        if (pagedResult.hasContent()) {
-            return pagedResult.getContent();
-        }
-        return new ArrayList<Account>();
+    public List<AccountDTO> getAllAccounts(Principal principal) {
+        List<AccountDTO> accounts = new ArrayList<>();
+        accountRepository.findAll().forEach(account -> {
+            AccountDTO acc = new AccountDTO()
+                    .setId(account.getId())
+                    .setName(account.getName())
+                    .setAmount(account.getAmount())
+                    .setDetails(account.getDetails())
+                    .setClient(account.getClient());
+            accounts.add(acc);
+        });
+        return accounts;
     }
+
+//    public List<Account> getAllAccounts(Integer pageNo, Integer pageSize, String sortBy) {
+//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).ascending());
+//
+//        Page<Account> pagedResult = accountRepository.findAll(paging);
+//
+//        if (pagedResult.hasContent()) {
+//            return pagedResult.getContent();
+//        }
+//        return new ArrayList<Account>();
+//    }
 
     public List<AccountDTO> getAccountsByClientCnp(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());

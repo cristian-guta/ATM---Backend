@@ -3,6 +3,7 @@ package com.test.demo.controller;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.dto.SubscriptionDTO;
 import com.test.demo.service.SubscriptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +15,8 @@ import java.util.List;
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
-
+    @Autowired
     private SubscriptionService subscriptionService;
-
-    public SubscriptionController(SubscriptionService subscriptionService) {
-        this.subscriptionService = subscriptionService;
-    }
 
     @PreAuthorize("permitAll()")
     @GetMapping("")
@@ -54,8 +51,8 @@ public class SubscriptionController {
 
     //admin
     @DeleteMapping("/deleteSubscription/{id}")
-    public ResultDTO deleteSubscription(@PathVariable(value = "id") int id) {
-        return subscriptionService.deleteSubscription(id);
+    public ResultDTO deleteSubscription(@PathVariable(value = "id") int id, Principal principal) {
+        return subscriptionService.deleteSubscription(id, principal);
     }
 
 

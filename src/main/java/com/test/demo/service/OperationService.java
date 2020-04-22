@@ -1,6 +1,7 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.OperationDTO;
+import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.model.Operation;
@@ -58,7 +59,7 @@ public class OperationService {
         return operations;
     }
 
-    public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
+    public ResultDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
         LocalDate date = LocalDate.now();
         Account account = accountRepository.findAccountById(accountId);
         Account transfer = new Account();
@@ -78,11 +79,12 @@ public class OperationService {
             emailService.createPDF(operation, principal, null);
         }
         operationRepository.save(operation);
-        return new OperationDTO()
-                .setAccount(account)
-                .setAmount(amount)
-                .setDate(date)
-                .setType(type)
-                .setClient(client);
+//        return new OperationDTO()
+//                .setAccount(account)
+//                .setAmount(amount)
+//                .setDate(date)
+//                .setType(type)
+//                .setClient(client);
+        return new ResultDTO().setStatus(true).setMessage("Operation added with success!");
     }
 }

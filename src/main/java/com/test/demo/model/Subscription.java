@@ -25,6 +25,9 @@ public class Subscription {
     @NotNull
     private Double price;
 
+    @NotNull
+    private Boolean deleted;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "subscriptions_benefits", joinColumns = {
             @JoinColumn(name = "subscription_id")}, inverseJoinColumns = {

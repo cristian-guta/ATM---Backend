@@ -37,18 +37,19 @@ public class SubscriptionService {
     }
 
     public void seedSubscriptions() {
-        seedSubscription(1, "Abonament 1", 33.4, randomizeBenefits());
-        seedSubscription(2, "Abonament 2", 335.4, randomizeBenefits());
+        seedSubscription(1, "Abonament 1", 33.4, randomizeBenefits(), false);
+        seedSubscription(2, "Abonament 2", 335.4, randomizeBenefits(), false);
 
     }
 
-    private void seedSubscription(int id, String name, double price, List<Benefit> benefits) {
+    private void seedSubscription(int id, String name, double price, List<Benefit> benefits, Boolean deleted) {
         Subscription subscription = subscriptionRepository.getById(id);
         if (subscription == null) {
             subscription = new Subscription()
                     .setId(id)
                     .setName(name)
                     .setPrice(price)
+                    .setDeleted(deleted)
                     .setBenefits(benefits);
             subscriptionRepository.save(subscription);
         }
@@ -61,9 +62,11 @@ public class SubscriptionService {
                     .setId(sub.getId())
                     .setName(sub.getName())
                     .setPrice(sub.getPrice())
+                    .setDeleted(sub.getDeleted())
                     .setBenefits(sub.getBenefits());
-
-            allSubscribtions.add(subs);
+            if(!subs.getDeleted()) {
+                allSubscribtions.add(subs);
+            }
         }
         return allSubscribtions;
     }
@@ -81,7 +84,7 @@ public class SubscriptionService {
             return sub;
         } else {
 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found or current user is admin!");
         }
 
 
@@ -103,8 +106,6 @@ public class SubscriptionService {
         clientRepository.save(client);
 
         return new ResultDTO().setStatus(true).setMessage("Subscription removed from your account!");
-
-
     }
 
     public SubscriptionDTO createSubscription(SubscriptionDTO newSubscription) {
@@ -118,10 +119,17 @@ public class SubscriptionService {
 
     }
 
-    public ResultDTO deleteSubscription(int id) {
-        Subscription subscription = subscriptionRepository.getById(id);
-        subscriptionRepository.delete(subscription);
 
+    public ResultDTO deleteSubscription(int id, Principal principal) {
+
+        Subscription subscription = subscriptionRepository.getById(id);
+        subscription.setDeleted(true);
+//        clientRepository.findAll().forEach(client -> {
+//            if(client.getUsername()!="admin" && client.getSubscription().getId()==id){
+//                client.setSubscription(null);
+//            }
+//        });
+        subscriptionRepository.save(subscription);
         return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
     }
 
