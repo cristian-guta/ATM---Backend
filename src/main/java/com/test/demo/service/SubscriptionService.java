@@ -74,7 +74,7 @@ public class SubscriptionService {
     public SubscriptionDTO getClientSubscription(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());
         Subscription subscription = client.getSubscription();
-        if (subscription != null) {
+        if (subscription != null && client.getUsername()!="admin") {
             SubscriptionDTO sub = new SubscriptionDTO()
                     .setId(subscription.getId())
                     .setName(subscription.getName())
@@ -119,19 +119,34 @@ public class SubscriptionService {
 
     }
 
-
+//deleting subscription and letting it active for users who are still subscribed to it
     public ResultDTO deleteSubscription(int id, Principal principal) {
 
         Subscription subscription = subscriptionRepository.getById(id);
         subscription.setDeleted(true);
-//        clientRepository.findAll().forEach(client -> {
-//            if(client.getUsername()!="admin" && client.getSubscription().getId()==id){
-//                client.setSubscription(null);
-//            }
-//        });
+
         subscriptionRepository.save(subscription);
         return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
     }
+
+//deleting subscription and automatically deactivating it from the users subscribed to it
+
+//    public ResultDTO deleteSubscription(int id, Principal principal) {
+//
+//        Subscription subscription = subscriptionRepository.getById(id);
+//        for (Client client : clientRepository.findAll()) {
+//            if(!client.getUsername().equals("admin")) {
+//                if (client.getSubscription().getId() == subscription.getId()) {
+//                    client.setSubscription(null);
+//                    clientRepository.save(client);
+//                }
+//            }
+//        }
+//        subscription.setDeleted(true);
+//
+//        subscriptionRepository.save(subscription);
+//        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
+//    }
 
     public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
         List<Benefit> benefits = benefitRepository.findByIdIn(subscriptionDTO.getBenefitIds());
