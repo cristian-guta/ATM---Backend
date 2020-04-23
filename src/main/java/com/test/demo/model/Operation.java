@@ -31,15 +31,16 @@ public class Operation {
     private Client client;
 
     @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "account_id")
     private Account account;
 
     public Operation() {
     }
 
-    public Operation(int id, String type, Double amount) {
+    public Operation(int id, String type, Double amount, Client client, Account account) {
         this.id = id;
         this.type = type;
         this.amount = amount;
+        this.client = client;
+        this.account = account;
     }
 }

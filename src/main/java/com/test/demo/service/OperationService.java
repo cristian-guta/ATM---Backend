@@ -46,17 +46,36 @@ public class OperationService {
     public List<OperationDTO> getAllOperations(Principal principal) {
         Client client = clientRepository.findByUsername(principal.getName());
         List<OperationDTO> operations = new ArrayList<>();
-        operationRepository.getOperationsByClientId(client.getId()).forEach(operation -> {
-            OperationDTO op = new OperationDTO()
-                    .setId(operation.getId())
-                    .setAccount(operation.getAccount())
-                    .setAmount(operation.getAmount())
-                    .setClient(operation.getClient())
-                    .setDate(operation.getDate())
-                    .setType(operation.getType());
-            operations.add(op);
-        });
+
+        //get operations for a client
+        if(!client.getUsername().equals("admin")) {
+            operationRepository.getOperationsByClientId(client.getId()).forEach(operation -> {
+                OperationDTO op = new OperationDTO()
+                        .setId(operation.getId())
+                        .setAccount(operation.getAccount())
+                        .setAmount(operation.getAmount())
+                        .setClient(operation.getClient())
+                        .setDate(operation.getDate())
+                        .setType(operation.getType());
+                operations.add(op);
+            });
+        } // get ALL operations
+        else{
+            operationRepository.findAll().forEach(operation -> {
+                OperationDTO operationDTO = new OperationDTO()
+                        .setId(operation.getId())
+                        .setAccount(operation.getAccount())
+                        .setAmount(operation.getAmount())
+                        .setClient(operation.getClient())
+                        .setDate(operation.getDate())
+                        .setType(operation.getType());
+
+                operations.add(operationDTO);
+            });
+        }
+
         return operations;
+
     }
 
     public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {

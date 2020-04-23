@@ -33,4 +33,10 @@ public class OperationController {
     public OperationDTO createOperation(Principal principal, @RequestParam int accountId, @RequestParam int transferId, String type, Double amount) throws IOException {
         return operationService.createOperation(principal, accountId, transferId, type, amount);
     }
+
+    //admin
+    @GetMapping("/getAllOperations")
+    public List<OperationDTO> getAllOperations(Principal principal){
+        return operationService.getAllOperations(principal);
+    }
 }
