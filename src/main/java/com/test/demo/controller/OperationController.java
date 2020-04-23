@@ -1,7 +1,6 @@
 package com.test.demo.controller;
 
 import com.test.demo.dto.OperationDTO;
-import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,9 +33,4 @@ public class OperationController {
         return operationService.createOperation(principal, accountId, transferId, type, amount);
     }
 
-    //admin
-    @GetMapping("/getAllOperations")
-    public List<OperationDTO> getAllOperations(Principal principal){
-        return operationService.getAllOperations(principal);
-    }
 }

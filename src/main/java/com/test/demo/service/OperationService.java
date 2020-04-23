@@ -1,7 +1,6 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.OperationDTO;
-import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.model.Operation;
@@ -48,7 +47,7 @@ public class OperationService {
         List<OperationDTO> operations = new ArrayList<>();
 
         //get operations for a client
-        if(!client.getUsername().equals("admin")) {
+        if (!client.getUsername().equals("admin")) {
             operationRepository.getOperationsByClientId(client.getId()).forEach(operation -> {
                 OperationDTO op = new OperationDTO()
                         .setId(operation.getId())
@@ -60,7 +59,7 @@ public class OperationService {
                 operations.add(op);
             });
         } // get ALL operations
-        else{
+        else {
             operationRepository.findAll().forEach(operation -> {
                 OperationDTO operationDTO = new OperationDTO()
                         .setId(operation.getId())
@@ -81,22 +80,21 @@ public class OperationService {
     public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
         LocalDate date = LocalDate.now();
         Account account = accountRepository.findAccountById(accountId);
-        Account transfer = new Account();
-        if (transferId != 0) {
-            transfer = accountRepository.findAccountById(transferId);
-        }
         Client client = clientRepository.findByUsername(principal.getName());
         Operation operation = new Operation()
-                .setAccount(account)
                 .setAmount(amount)
                 .setDate(date)
                 .setType(type)
                 .setClient(client);
-        if (type.toLowerCase() == "transfer") {
+        if (transferId != 0) {
+            Account transfer = accountRepository.findAccountById(transferId);
+            operation.setAccount(transfer);
             emailService.createPDF(operation, principal, transfer);
         } else {
+            operation.setAccount(account);
             emailService.createPDF(operation, principal, null);
         }
+
         operationRepository.save(operation);
         return new OperationDTO()
                 .setAccount(account)
@@ -104,6 +102,6 @@ public class OperationService {
                 .setDate(date)
                 .setType(type)
                 .setClient(client);
-//        return new ResultDTO().setStatus(true).setMessage("Operation added with success!");
+
     }
 }
