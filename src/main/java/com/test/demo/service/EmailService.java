@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 @Service
 public class EmailService {
@@ -32,6 +33,7 @@ public class EmailService {
     private ClientRepository clientRepository;
     private SubscriptionRepository subscriptionRepository;
     private AccountRepository accountRepository;
+    private Logger log = Logger.getLogger(EmailService.class.getName());
 
     @Autowired
     public EmailService(SenderService senderService, ClientRepository clientRepository, SubscriptionRepository subscriptionRepository, AccountRepository accountRepository) {
@@ -42,6 +44,8 @@ public class EmailService {
     }
 
     public void createPDF(Operation operation, Principal principal, Account acc) throws IOException {
+        log.info("Creating PDF file...");
+
         File file = new File(DEST);
         file.getParentFile().mkdirs();
 
@@ -52,6 +56,7 @@ public class EmailService {
 
         PdfDocument pdf = new PdfDocument(writer);
 
+        log.info("Setting up font...");
         PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
 
         Document document = new Document(pdf);
@@ -61,15 +66,17 @@ public class EmailService {
         text.setFont(font);
         text.setFontColor(Color.RED);
 
+        log.info("Generating paragraphs...");
         Paragraph paragraph1 = new Paragraph();
         paragraph1.add(text);
         document.add(paragraph1);
 
+        log.info("Fetching client...");
         Client client = clientRepository.findByUsername(principal.getName());
         Account account = operation.getAccount();
 
 
-        document.add(new Paragraph("Tranzaction details"));
+        document.add(new Paragraph("Transaction details"));
 
         Paragraph paragraph2 = new Paragraph();
 
@@ -95,6 +102,7 @@ public class EmailService {
         document.add(paragraph2);
 
         document.close();
+        log.info("Document is generated, starting sendMail(...) procedure...");
         senderService.sendMail(DEST, client.getEmail(), client.getFirstName() + " " + client.getLastName());
     }
 }

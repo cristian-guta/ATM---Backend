@@ -3,30 +3,25 @@ package com.test.demo.service;
 import com.test.demo.dto.BenefitDTO;
 import com.test.demo.model.Benefit;
 import com.test.demo.repository.BenefitRepository;
-import com.test.demo.repository.ClientRepository;
-import com.test.demo.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class BenefitService {
 
-    @Autowired
     private BenefitRepository benefitRepository;
+    private Logger log = Logger.getLogger(BenefitService.class.getName());
 
     @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private SubscriptionService subscriptionService;
-
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    public BenefitService(BenefitRepository benefitRepository) {
+        this.benefitRepository = benefitRepository;
+    }
 
     public void seedBenefits() {
         seedBenefit(1, "Minute nationale");
@@ -46,6 +41,9 @@ public class BenefitService {
     }
 
     public List<BenefitDTO> getAllBenefits() {
+
+        log.info("Listing ALL benefits...");
+
         List<BenefitDTO> benefits = new ArrayList<>();
         for (Benefit ben : benefitRepository.findAll()) {
             BenefitDTO bnf = new BenefitDTO()
@@ -57,6 +55,9 @@ public class BenefitService {
     }
 
     public List<BenefitDTO> getBenefitsBySubscription(Principal principal, int id) {
+
+        log.info("Listing all benefits by subscription...");
+
         List<BenefitDTO> benefits = new ArrayList<>();
         benefitRepository.findBySubscriptionId(id).forEach(benefit -> {
             BenefitDTO ben = new BenefitDTO().setId(benefit.getId())

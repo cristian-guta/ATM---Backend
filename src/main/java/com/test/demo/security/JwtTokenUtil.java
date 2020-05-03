@@ -25,6 +25,11 @@ public class JwtTokenUtil {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    public JwtTokenUtil(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }

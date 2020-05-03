@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -45,19 +46,26 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    private Logger log = Logger.getLogger(CustomUserDetailsService.class.getName());
+
     @Override
     public UserDetails loadUserByUsername(String username) throws ResponseStatusException {
+        log.info("Loading user by username...");
         Client client = clientRepository.findByUsername(username);
         if (client == null) {
+            log.info("User not found...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with username: " + username);
         } else if (client.getStatus()) {
+            log.info("Invalid credentials...");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials!");
         }
+        log.info("Loading...");
         return new org.springframework.security.core.userdetails.User(client.getUsername(), client.getPassword(),
                 getAuthority(client));
     }
 
     private List<SimpleGrantedAuthority> getAuthority(Client client) {
+        log.info("Fetching authority...");
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Role role = client.getRole();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
@@ -65,6 +73,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public Client save(ClientDTO user) {
+        log.info("Saving new client account...");
         Client newUser = new Client()
                 .setUsername(user.getUsername())
                 .setEmail(user.getEmail())
@@ -75,10 +84,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .setAddress(user.getAddress());
         Role role = roleRepository.findByName("USER");
         newUser.setRole(role);
+        log.info("New client saved...");
         return clientRepository.save(newUser);
     }
 
     public JwtResponse handleLogin(JwtRequest authenticationRequest) throws Exception {
+        log.info("Authenticating process...");
+
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
@@ -90,8 +102,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            log.info("User disabled...");
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            log.info("Invalid credentials...");
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }

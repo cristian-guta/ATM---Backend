@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Logger;
 
 @Service
 public class ClientService {
@@ -27,6 +28,7 @@ public class ClientService {
     private RoleRepository roleRepository;
     private PasswordEncoder bCryptPasswordEncoder;
     private SubscriptionRepository subscriptionRepository;
+    private Logger log = Logger.getLogger(ClientService.class.getName());
 
 
     @Autowired
@@ -89,16 +91,22 @@ public class ClientService {
     }
 
     public ClientDTO getCurrentClient(Principal principal) {
+        log.info("Fetching current client...");
+
         return new ClientDTO((clientRepository.findByUsername(principal.getName())));
     }
 
     public List<ClientDTO> getAll() {
+        log.info("Listing all clients...");
+
         List<ClientDTO> clients = new ArrayList<>();
         clientRepository.findAll().forEach(u -> clients.add(new ClientDTO(u)));
         return clients;
     }
 
     public ClientDTO updateClient(Principal principal, Integer id, ClientDTO updatedClient) {
+        log.info("Updating client's informations...");
+
         Client reqClient = clientRepository.findById(id).get();
         Client currentClient = clientRepository.findByUsername(principal.getName());
         if (reqClient != null && reqClient.getId() == currentClient.getId()) {
@@ -108,28 +116,38 @@ public class ClientService {
             currentClient.setEmail(updatedClient.getEmail());
             currentClient.setCnp(updatedClient.getCnp());
 
+            log.info("Saving new state of Client entity...");
             return new ClientDTO(clientRepository.save(currentClient));
         } else {
+            log.info("Something went wrong while executing updateClient(...) method...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found!");
         }
 
     }
 
     public ResultDTO deactivateClient(Integer id) {
+        log.info("Deactivating client...");
+
         return changeClientStatus(id, true);
     }
 
     public ResultDTO activateClient(Integer id) {
+        log.info("Activating client...");
+
         return changeClientStatus(id, false);
     }
 
     private ResultDTO changeClientStatus(Integer id, Boolean status) {
+        log.info("Changing client's status...");
+
         Optional<Client> client = clientRepository.findById(id);
         if (client.isPresent()) {
             client.get().setStatus(status);
             clientRepository.save(client.get());
+            log.info("Client's status updated...");
             return new ResultDTO().setStatus(true).setMessage("Successfully changed user status!");
         } else {
+            log.info("Something went wrong while executing changeClientStatus(...) method...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }
 

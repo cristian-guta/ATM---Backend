@@ -12,10 +12,17 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @Service
 public class SenderService {
+
+    private static Logger log = Logger.getLogger(SenderService.class.getName());
+
     static void sendMail(String filename, String email, String numeClient) {
+
+        log.info("Set up organization mail security...");
+
         final String username = "javatest12345678900@gmail.com";
         final String password = "Parola.1234";
 
@@ -33,6 +40,7 @@ public class SenderService {
                 });
 
         try {
+            log.info("Building new message");
             // Create a default MimeMessage object.
             Message message = new MimeMessage(session);
 
@@ -73,7 +81,9 @@ public class SenderService {
 
             // Send message
             Transport.send(message);
+            log.info("Mail sent...");
         } catch (MessagingException e) {
+            log.info("Something went wrong while executing Transport.send(...) method...");
             e.printStackTrace();
         }
     }

@@ -2,38 +2,29 @@ package com.test.demo;
 
 import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
-import com.test.demo.model.Account;
-import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
 import com.test.demo.service.AccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AccountServiceTest {
-
-    @Autowired
-    private AccountRepository accountRepository;
 
     @Mock
     private AccountService accountService;
@@ -47,6 +38,11 @@ public class AccountServiceTest {
             return "user";
         }
     };
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void addAccountTest() {
@@ -65,12 +61,9 @@ public class AccountServiceTest {
     public void addAccountTest2() {
 
         AccountDTO accountDTO = new AccountDTO().setAmount(2343.2).setName("af").setDetails("fd")/*.setClient(clientRepository.findByUsername("user"))*/;
-
         accountService.createAccount(accountDTO, principal);
-
         verify(accountService, times(1)).createAccount(accountDTO, principal);
     }
-
 
     @Test
     public void getAccountsTest() {
@@ -117,8 +110,6 @@ public class AccountServiceTest {
 ////        Page<Account> accounts = new PageImpl<>(accountList);
 //
 //        when(accountService.getAllAccounts(pageNo, pageSize, sortBy)).thenReturn(accountList);
-//
-//
 //    }
 
     @Test
