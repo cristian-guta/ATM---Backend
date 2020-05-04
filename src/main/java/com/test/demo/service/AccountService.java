@@ -154,14 +154,22 @@ public class AccountService {
         log.info("Withdrawing money...");
 
         Account account = accountRepository.findAccountById(accountId);
-        Double total = account.getAmount() - amount;
-        account.setAmount(total);
+        try{
+            Double total = account.getAmount() - amount;
+            if(total<0){
+                throw new RuntimeException("You want to withdraw more than you own! Throwing exception...");
+            }
+            else {
+                account.setAmount(total);
+                log.info("Saving new account state...");
+                accountRepository.save(account);
 
-        log.info("Saving new account state...");
-        accountRepository.save(account);
-
-        log.info("Creating operation and preparing mail summary...");
-        operationService.createOperation(principal, account.getId(), 0, "deposit", amount);
+                log.info("Creating operation and preparing mail summary...");
+                operationService.createOperation(principal, account.getId(), 0, "deposit", amount);
+            }
+        }catch(RuntimeException exc){
+            exc.printStackTrace();
+        }
         return new ResultDTO().setStatus(true).setMessage("Money deposed!");
     }
 
@@ -171,20 +179,30 @@ public class AccountService {
         Account account = accountRepository.findAccountById(senderAccountId);
         Account toSendTo = accountRepository.findAccountById(receiverAccountId);
 
-        Double senderAmount = account.getAmount() - amount;
-        account.setAmount(senderAmount);
+        try{
+            if(amount<account.getAmount()){
+                Double senderAmount = account.getAmount() - amount;
+                account.setAmount(senderAmount);
 
-        log.info("Saving new state of sender's account...");
-        accountRepository.save(account);
+                log.info("Saving new state of sender's account...");
+                accountRepository.save(account);
 
-        Double receiverAmount = toSendTo.getAmount() + amount;
-        toSendTo.setAmount(receiverAmount);
+                Double receiverAmount = toSendTo.getAmount() + amount;
+                toSendTo.setAmount(receiverAmount);
 
-        log.info("Saving new state of receiver's account...");
-        accountRepository.save(toSendTo);
+                log.info("Saving new state of receiver's account...");
+                accountRepository.save(toSendTo);
 
-        log.info("Creating operation and preparing mail summary...");
-        operationService.createOperation(principal, account.getId(), toSendTo.getId(), "transfer", amount);
+                log.info("Creating operation and preparing mail summary...");
+                operationService.createOperation(principal, account.getId(), toSendTo.getId(), "transfer", amount);
+            }
+            else{
+                throw new RuntimeException("You want to transfer more than you own! Throwing exception...");
+            }
+        }catch(RuntimeException exc){
+            exc.printStackTrace();
+        }
+
         return new ResultDTO().setStatus(true).setMessage("Amount successfully transfered!");
     }
 
