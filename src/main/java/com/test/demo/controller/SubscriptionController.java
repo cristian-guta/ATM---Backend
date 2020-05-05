@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class SubscriptionController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/activateSubscription/{id}")
-    public ResultDTO activateSubscription(Principal principal, @PathVariable(value = "id") int id) {
+    public ResultDTO activateSubscription(Principal principal, @PathVariable(value = "id") int id) throws IOException {
         return subscriptionService.activateSubscription(principal, id);
     }
 

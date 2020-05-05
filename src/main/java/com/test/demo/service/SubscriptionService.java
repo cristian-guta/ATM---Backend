@@ -1,10 +1,13 @@
 package com.test.demo.service;
 
+import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.dto.SubscriptionDTO;
+import com.test.demo.model.Account;
 import com.test.demo.model.Benefit;
 import com.test.demo.model.Client;
 import com.test.demo.model.Subscription;
+import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.BenefitRepository;
 import com.test.demo.repository.ClientRepository;
 import com.test.demo.repository.SubscriptionRepository;
@@ -13,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -24,13 +29,17 @@ public class SubscriptionService {
     private SubscriptionRepository subscriptionRepository;
     private BenefitRepository benefitRepository;
     private ClientRepository clientRepository;
+    private AccountRepository accountRepository;
+    private OperationService operationService;
     private Logger log = Logger.getLogger(SubscriptionService.class.getName());
 
     @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository, BenefitRepository benefitRepository, ClientRepository clientRepository) {
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, BenefitRepository benefitRepository, ClientRepository clientRepository, AccountRepository accountRepository, OperationService operationService) {
         this.subscriptionRepository = subscriptionRepository;
         this.benefitRepository = benefitRepository;
         this.clientRepository = clientRepository;
+        this.accountRepository = accountRepository;
+        this.operationService = operationService;
     }
 
     private List<Benefit> randomizeBenefits() {
@@ -92,26 +101,43 @@ public class SubscriptionService {
             return sub;
         } else {
             log.info("Something went wrong while executing getClientSubscription(...) method...");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found or current user is admin!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No subscription active or current user is admin!");
         }
     }
 
-    public ResultDTO activateSubscription(Principal principal, int subId) {
+    public ResultDTO activateSubscription(Principal principal, int subId) throws IOException {
         log.info("Activating subscription for " + principal.getName() + "...");
-
+        LocalDate date = LocalDate.now();
+        Subscription subscription = subscriptionRepository.getById(subId);
         Client client = clientRepository.findByUsername(principal.getName());
-        client.setSubscription(subscriptionRepository.getById(subId));
-        clientRepository.save(client);
+        client.setSubscription(subscription);
 
+        List<AccountDTO> accounts = accountRepository.findAccountsByClient_Cnp(client.getCnp());
+        Account account = accountRepository.findAccountById(accounts.get(0).getId());
+
+        log.info("Processing payment...");
+
+        Double price = subscription.getPrice();
+        Double amount = account.getAmount();
+        amount -= price;
+        account.setAmount(amount);
+
+        clientRepository.save(client);
+        accountRepository.save(account);
+        log.info("Payment received...");
         log.info("Subscription activated...");
+
+        operationService.createOperation(principal, account.getId(), 0, "payment", price);
+
         return new ResultDTO().setStatus(true).setMessage("Subscription activated!");
     }
 
 
     public ResultDTO cancelSubscription(Principal principal) {
-        log.info("Canceling subscription for ..." + principal.getName() + "...");
 
         Client client = clientRepository.findByUsername(principal.getName());
+
+        log.info("Canceling subscription for ..." + client.getFirstName() + " " + client.getLastName() + "...");
         client.setSubscription(null);
         clientRepository.save(client);
 

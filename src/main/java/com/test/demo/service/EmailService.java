@@ -98,6 +98,12 @@ public class EmailService {
             paragraph2.add("Amount transfered: " + operation.getAmount() + "\n");
             paragraph2.add("Current Balance: " + account.getAmount() + "\n");
         }
+        if (operation.getType().toLowerCase() == "payment") {
+            paragraph2.add("Date: " + date + "\n");
+            paragraph2.add("Account name: " + account.getName() + "\n"); //
+            paragraph2.add("Paid amount: " + operation.getAmount() + "\n");
+            paragraph2.add("Current Balance: " + account.getAmount() + "\n");
+        }
 
         document.add(paragraph2);
 

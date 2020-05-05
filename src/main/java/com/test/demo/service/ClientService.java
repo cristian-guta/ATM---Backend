@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -29,7 +29,6 @@ public class ClientService {
     private PasswordEncoder bCryptPasswordEncoder;
     private SubscriptionRepository subscriptionRepository;
     private Logger log = Logger.getLogger(ClientService.class.getName());
-
 
     @Autowired
     public ClientService(PasswordEncoder bCryptPasswordEncoder, ClientRepository userRepository, RoleRepository roleRepository, SubscriptionRepository subscriptionRepository) {
@@ -63,9 +62,11 @@ public class ClientService {
         seedClient(3, "user1", "First", "last", "467234", "Adresa 3", "first@domain.com", "password", false, subscriptionRepository.getById(2));
     }
 
-
     private void seedClient(int id, String username, String firstName, String lastName, String cnp, String address, String email, String password, boolean deactivated, Subscription subscription) {
         Client client = clientRepository.findByUsername(username);
+        LocalDate date = LocalDate.now();
+
+
         if (client == null) {
             String roleName = "USER";
             if (username.equals("admin")) {
@@ -87,7 +88,6 @@ public class ClientService {
                     .setSubscription(subscription);
             clientRepository.save(client);
         }
-
     }
 
     public ClientDTO getCurrentClient(Principal principal) {
@@ -122,7 +122,6 @@ public class ClientService {
             log.info("Something went wrong while executing updateClient(...) method...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found!");
         }
-
     }
 
     public ResultDTO deactivateClient(Integer id) {
@@ -150,7 +149,5 @@ public class ClientService {
             log.info("Something went wrong while executing changeClientStatus(...) method...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!");
         }
-
     }
-
 }

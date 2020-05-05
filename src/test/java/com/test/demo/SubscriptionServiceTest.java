@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,7 @@ public class SubscriptionServiceTest {
     }
 
     @Test
-    public void activateSubscriptionTest() {
+    public void activateSubscriptionTest() throws IOException {
 
 
         int id = 1;

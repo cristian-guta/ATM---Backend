@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @Accessors(chain = true)
@@ -50,6 +51,8 @@ public class Client implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
+
+//    private LocalDate activationDate;
 
     public Client() {
     }
