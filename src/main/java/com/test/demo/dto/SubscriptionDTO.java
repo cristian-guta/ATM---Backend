@@ -19,13 +19,13 @@ public class SubscriptionDTO {
     private Double price;
     private List<Benefit> benefits;
     private int[] benefitIds;
-    private Boolean deleted;
+//    private Boolean deleted;
 
     public SubscriptionDTO(Subscription subscription) {
         this.id = subscription.getId();
         this.name = subscription.getName();
         this.price = subscription.getPrice();
         this.benefits = subscription.getBenefits();
-        this.deleted = subscription.getDeleted();
+//        this.deleted = subscription.getDeleted();
     }
 }

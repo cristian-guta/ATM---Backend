@@ -4,6 +4,7 @@ import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ public class AccountController {
 
     //    @PreAuthorize("isAuthenticated")
     @GetMapping("")
-    public List<AccountDTO> getAccountsByCnp(Principal principal) {
-        return accountService.getAccountsByClientCnp(principal);
+    public AccountDTO getAccountsByCnp(Principal principal) {
+        return accountService.getAccountByClientCnp(principal);
     }
 
     @GetMapping("/{id}")
@@ -28,7 +29,7 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
-    //    @PreAuthorize("hasAdmin()")
+//        @PreAuthorize("hasAdmin()")
     @GetMapping("/getAllAccounts")
     public List<AccountDTO> getAllAccounts(Principal principal) {
         return accountService.getAllAccounts(principal);

@@ -17,7 +17,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     Account findAccountsByName(String name);
 
-    List<AccountDTO> findAccountsByClient_Cnp(String cnp);
+    AccountDTO findAccountByClient_Cnp(String cnp);
 
     @Query("select a from Account a where a.id = ?1")
     Account findAccountById(int id);

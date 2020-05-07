@@ -35,7 +35,6 @@ public class AccountService {
     }
 
     public void seedAccounts() {
-        seedAccount(1, 334.5, "Account 1", "detail 1", /*clientRepository.findByUsername("admin")*/ clientRepository.findByUsername("user1"));
         seedAccount(2, 33345.4, "Account 2", "detail 2", clientRepository.findByUsername("user"));
         seedAccount(3, 33.3, "Account 3", "detail 3", clientRepository.findByUsername("user1"));
     }
@@ -71,23 +70,12 @@ public class AccountService {
     }
 
 
-    public List<AccountDTO> getAccountsByClientCnp(Principal principal) {
-        log.info("Listing all accounts based on client's CNP...");
+    public AccountDTO getAccountByClientCnp(Principal principal) {
+        log.info("Listing client's account based on his CNP...");
 
         Client client = clientRepository.findByUsername(principal.getName());
-        List<AccountDTO> accounts = new ArrayList<>();
 
-        accountRepository.findAccountsByClient_Cnp(client.getCnp()).forEach(x -> {
-            AccountDTO acc = new AccountDTO()
-                    .setId(x.getId())
-                    .setAmount(x.getAmount())
-                    .setClient(x.getClient())
-                    .setName(x.getName())
-                    .setDetails(x.getDetails());
-            accounts.add(acc);
-        });
-
-        return accounts.stream().collect(Collectors.toList());
+        return accountRepository.findAccountByClient_Cnp(client.getCnp());
     }
 
     public AccountDTO createAccount(@RequestBody AccountDTO account, Principal principal) {
@@ -95,7 +83,6 @@ public class AccountService {
 
         Client client = clientRepository.findByUsername(principal.getName());
         Account newAccount = new Account()
-
                 .setAmount(account.getAmount())
                 .setName(account.getName())
                 .setDetails(account.getDetails())

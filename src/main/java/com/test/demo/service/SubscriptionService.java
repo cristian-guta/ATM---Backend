@@ -62,7 +62,7 @@ public class SubscriptionService {
                     .setId(id)
                     .setName(name)
                     .setPrice(price)
-                    .setDeleted(deleted)
+//                    .setDeleted(deleted)
                     .setBenefits(benefits);
             subscriptionRepository.save(subscription);
         }
@@ -77,11 +77,12 @@ public class SubscriptionService {
                     .setId(sub.getId())
                     .setName(sub.getName())
                     .setPrice(sub.getPrice())
-                    .setDeleted(sub.getDeleted())
+//                    .setDeleted(sub.getDeleted())
                     .setBenefits(sub.getBenefits());
-            if (!subs.getDeleted()) {
-                allSubscribtions.add(subs);
-            }
+//            if (!subs.getDeleted()) {
+//                allSubscribtions.add(subs);
+//            }
+            allSubscribtions.add(subs);
         }
         return allSubscribtions;
     }
@@ -112,8 +113,8 @@ public class SubscriptionService {
         Client client = clientRepository.findByUsername(principal.getName());
         client.setSubscription(subscription);
 
-        List<AccountDTO> accounts = accountRepository.findAccountsByClient_Cnp(client.getCnp());
-        Account account = accountRepository.findAccountById(accounts.get(0).getId());
+        AccountDTO account = accountRepository.findAccountByClient_Cnp(client.getCnp());
+        Account acc = accountRepository.findAccountById(account.getId());
 
         log.info("Processing payment...");
 
@@ -123,7 +124,7 @@ public class SubscriptionService {
         account.setAmount(amount);
 
         clientRepository.save(client);
-        accountRepository.save(account);
+        accountRepository.save(acc);
         log.info("Payment received...");
         log.info("Subscription activated...");
 
@@ -163,10 +164,10 @@ public class SubscriptionService {
     public ResultDTO deleteSubscription(int id, Principal principal) {
         log.info("Deleting subscription...");
 
-        Subscription subscription = subscriptionRepository.getById(id);
-        subscription.setDeleted(true);
-
-        subscriptionRepository.save(subscription);
+//        Subscription subscription = subscriptionRepository.getById(id);
+//        subscription.setDeleted(true);
+        subscriptionRepository.deleteSubscriptionById(id);
+//        subscriptionRepository.save(subscription);
 
         log.info("Subscription deleted...");
         return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");

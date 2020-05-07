@@ -30,7 +30,7 @@ public class Operation {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
 
     public Operation() {
