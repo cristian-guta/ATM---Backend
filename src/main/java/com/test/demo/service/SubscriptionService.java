@@ -161,36 +161,28 @@ public class SubscriptionService {
     }
 
     //deleting subscription and letting it active for users who are still subscribed to it
-    public ResultDTO deleteSubscription(int id, Principal principal) {
-        log.info("Deleting subscription...");
-
-//        Subscription subscription = subscriptionRepository.getById(id);
-//        subscription.setDeleted(true);
-        subscriptionRepository.deleteSubscriptionById(id);
-//        subscriptionRepository.save(subscription);
-
-        log.info("Subscription deleted...");
-        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
-    }
+//    public ResultDTO deleteSubscription(int id, Principal principal) {
+//        log.info("Deleting subscription...");
+//
+//        subscriptionRepository.deleteSubscriptionById(id);
+//        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
+//    }
 
 //deleting subscription and automatically deactivating it from the users subscribed to it
 
-//    public ResultDTO deleteSubscription(int id, Principal principal) {
-//
-//        Subscription subscription = subscriptionRepository.getById(id);
-//        for (Client client : clientRepository.findAll()) {
-//            if(!client.getUsername().equals("admin")) {
-//                if (client.getSubscription().getId() == subscription.getId()) {
-//                    client.setSubscription(null);
-//                    clientRepository.save(client);
-//                }
-//            }
-//        }
-//        subscription.setDeleted(true);
-//
-//        subscriptionRepository.save(subscription);
-//        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
-//    }
+    public ResultDTO deleteSubscription(int id, Principal principal) {
+
+        for (Client client : clientRepository.findAll()) {
+
+            if(client.getSubscription() != null && client.getSubscription().getId() == id) {
+                client.setSubscription(null);
+                clientRepository.save(client);
+            }
+        }
+
+        subscriptionRepository.deleteSubscriptionById(id);
+        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
+    }
 
     public SubscriptionDTO updateSubscription(int id, SubscriptionDTO subscriptionDTO) {
         log.info("Updating subscription...");
@@ -201,6 +193,7 @@ public class SubscriptionService {
         updateSubscription.setId(subscriptionDTO.getId())
                 .setName(subscriptionDTO.getName())
                 .setPrice(subscriptionDTO.getPrice())
+
                 .setBenefits(benefits);
 
         log.info("Saving new subscription object state...");

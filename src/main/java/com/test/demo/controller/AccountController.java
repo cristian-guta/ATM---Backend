@@ -18,7 +18,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    //    @PreAuthorize("isAuthenticated")
     @GetMapping("")
     public AccountDTO getAccountsByCnp(Principal principal) {
         return accountService.getAccountByClientCnp(principal);
@@ -29,7 +28,7 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
-//        @PreAuthorize("hasAdmin()")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllAccounts")
     public List<AccountDTO> getAllAccounts(Principal principal) {
         return accountService.getAllAccounts(principal);

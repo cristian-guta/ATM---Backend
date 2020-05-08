@@ -44,20 +44,20 @@ public class SubscriptionController {
         return subscriptionService.cancelSubscription(principal);
     }
 
-    //admin
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createSubscription")
     public SubscriptionDTO createSubscription(@RequestBody SubscriptionDTO newSubscription) {
         return subscriptionService.createSubscription(newSubscription);
     }
 
-    //admin
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteSubscription/{id}")
     public ResultDTO deleteSubscription(@PathVariable(value = "id") int id, Principal principal) {
         return subscriptionService.deleteSubscription(id, principal);
     }
 
 
-    //admin
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateSubscription/{id}")
     public SubscriptionDTO updateSubscription(@PathVariable(value = "id") int id, @RequestBody SubscriptionDTO subscriptionDTO) {
         return subscriptionService.updateSubscription(id, subscriptionDTO);
