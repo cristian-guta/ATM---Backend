@@ -7,6 +7,9 @@ import com.test.demo.model.Client;
 import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -52,21 +54,18 @@ public class AccountService {
         }
     }
 
-    public List<AccountDTO> getAllAccounts(Principal principal) {
+    public Page<AccountDTO> getAllAccounts(int page, int size) {
 
         log.info("Listing ALL accounts...");
+        PageRequest pageRequest = PageRequest.of(page, size);
 
-        List<AccountDTO> accounts = new ArrayList<>();
-        accountRepository.findAll().forEach(account -> {
-            AccountDTO acc = new AccountDTO()
-                    .setId(account.getId())
-                    .setName(account.getName())
-                    .setAmount(account.getAmount())
-                    .setDetails(account.getDetails())
-                    .setClient(account.getClient());
-            accounts.add(acc);
-        });
-        return accounts;
+        Page<Account> pageResult = accountRepository.findAll(pageRequest);
+
+        List<AccountDTO> accounts = pageResult
+                .stream()
+                .map(AccountDTO::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(accounts, pageRequest, pageResult.getTotalElements());
     }
 
 
@@ -141,12 +140,11 @@ public class AccountService {
         log.info("Withdrawing money...");
 
         Account account = accountRepository.findAccountById(accountId);
-        try{
+        try {
             Double total = account.getAmount() - amount;
-            if(total<0){
+            if (total < 0) {
                 throw new RuntimeException("You want to withdraw more than you own! Throwing exception...");
-            }
-            else {
+            } else {
                 account.setAmount(total);
                 log.info("Saving new account state...");
                 accountRepository.save(account);
@@ -154,7 +152,7 @@ public class AccountService {
                 log.info("Creating operation and preparing mail summary...");
                 operationService.createOperation(principal, account.getId(), 0, "deposit", amount);
             }
-        }catch(RuntimeException exc){
+        } catch (RuntimeException exc) {
             exc.printStackTrace();
         }
         return new ResultDTO().setStatus(true).setMessage("Money deposed!");
@@ -166,8 +164,8 @@ public class AccountService {
         Account account = accountRepository.findAccountById(senderAccountId);
         Account toSendTo = accountRepository.findAccountById(receiverAccountId);
 
-        try{
-            if(amount<account.getAmount()){
+        try {
+            if (amount < account.getAmount()) {
                 Double senderAmount = account.getAmount() - amount;
                 account.setAmount(senderAmount);
 
@@ -182,11 +180,10 @@ public class AccountService {
 
                 log.info("Creating operation and preparing mail summary...");
                 operationService.createOperation(principal, account.getId(), toSendTo.getId(), "transfer", amount);
-            }
-            else{
+            } else {
                 throw new RuntimeException("You want to transfer more than you own! Throwing exception...");
             }
-        }catch(RuntimeException exc){
+        } catch (RuntimeException exc) {
             exc.printStackTrace();
         }
 

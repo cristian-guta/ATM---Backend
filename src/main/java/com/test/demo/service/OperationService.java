@@ -8,15 +8,18 @@ import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
 import com.test.demo.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class OperationService {
@@ -46,42 +49,26 @@ public class OperationService {
         }
     }
 
-    public List<OperationDTO> getAllOperations(Principal principal) {
+    public Page<OperationDTO> getAllOperations(int page, int size, Principal principal) {
         log.info("Listing operations...");
-
+        PageRequest pageRequest = PageRequest.of(page, size);
         Client client = clientRepository.findByUsername(principal.getName());
-        List<OperationDTO> operations = new ArrayList<>();
+        Page<Operation> pageResult;
 
-        //get operations for a client
         if (!client.getUsername().equals("admin")) {
-            log.info("User is admin, fetching ALL operations...");
-            operationRepository.getOperationsByClientId(client.getId()).forEach(operation -> {
-                OperationDTO op = new OperationDTO()
-                        .setId(operation.getId())
-                        .setAccount(operation.getAccount())
-                        .setAmount(operation.getAmount())
-                        .setClient(operation.getClient())
-                        .setDate(operation.getDate())
-                        .setType(operation.getType());
-                operations.add(op);
-            });
-        } // get ALL operations
-        else {
             log.info("User is not admin, fetching personal operations...");
-            operationRepository.findAll().forEach(operation -> {
-                OperationDTO operationDTO = new OperationDTO()
-                        .setId(operation.getId())
-                        .setAccount(operation.getAccount())
-                        .setAmount(operation.getAmount())
-                        .setClient(operation.getClient())
-                        .setDate(operation.getDate())
-                        .setType(operation.getType());
-
-                operations.add(operationDTO);
-            });
+            pageResult = operationRepository.findByClient_Id(client.getId(), pageRequest);
+        } else {
+            log.info("User is admin, fetching ALL operations...");
+            pageResult = operationRepository.findAll(pageRequest);
         }
 
-        return operations;
+        List<OperationDTO> operations = pageResult
+                .stream()
+                .map(OperationDTO::new)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(operations, pageRequest, pageResult.getTotalElements());
 
     }
 

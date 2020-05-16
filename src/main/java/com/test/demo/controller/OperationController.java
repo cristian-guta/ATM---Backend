@@ -3,12 +3,12 @@ package com.test.demo.controller;
 import com.test.demo.dto.OperationDTO;
 import com.test.demo.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -18,9 +18,11 @@ public class OperationController {
     @Autowired
     private OperationService operationService;
 
-    @GetMapping("")
-    public List<OperationDTO> getAll(Principal principal) {
-        return operationService.getAllOperations(principal);
+    @GetMapping("/{page}/{size}")
+    public Page<OperationDTO> getAll(@PathVariable(value = "page") int page,
+                                     @PathVariable(value = "size") int size,
+                                     Principal principal) {
+        return operationService.getAllOperations(page, size, principal);
     }
 
     @GetMapping("/{id}")

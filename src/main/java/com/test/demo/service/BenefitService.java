@@ -4,6 +4,10 @@ import com.test.demo.dto.BenefitDTO;
 import com.test.demo.model.Benefit;
 import com.test.demo.repository.BenefitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -40,11 +44,8 @@ public class BenefitService {
         }
     }
 
-    public List<BenefitDTO> getAllBenefits() {
-
-        log.info("Listing ALL benefits...");
-
-        List<BenefitDTO> benefits = new ArrayList<>();
+    public List<BenefitDTO> getAllBenefits(){
+                List<BenefitDTO> benefits = new ArrayList<>();
         for (Benefit ben : benefitRepository.findAll()) {
             BenefitDTO bnf = new BenefitDTO()
                     .setId(ben.getId())
@@ -52,6 +53,19 @@ public class BenefitService {
             benefits.add(bnf);
         }
         return benefits;
+    }
+
+    public Page<BenefitDTO> getAllBenefitsPaged(int page, int size) {
+
+        log.info("Listing ALL benefits...");
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<Benefit> pageResult = benefitRepository.findAll(pageRequest);
+        List<BenefitDTO> benefits = pageResult
+                .stream()
+                .map(BenefitDTO::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(benefits, pageRequest, pageResult.getTotalElements());
     }
 
     public List<BenefitDTO> getBenefitsBySubscription(Principal principal, int id) {

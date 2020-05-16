@@ -65,22 +65,22 @@ public class AccountServiceTest {
         verify(accountService, times(1)).createAccount(accountDTO, principal);
     }
 
-    @Test
-    public void getAccountsTest() {
-
-        List<AccountDTO> accountDTOS = new ArrayList<>();
-        AccountDTO accountDTO = new AccountDTO().setAmount(242.4).setDetails("dfd").setName("fs");
-        AccountDTO accountDTO1 = new AccountDTO().setAmount(242.4).setDetails("ddgfd").setName("ffs");
-        AccountDTO accountDTO2 = new AccountDTO().setAmount(242.4).setDetails("dfhd").setName("fffs");
-
-        accountDTOS.add(accountDTO);
-        accountDTOS.add(accountDTO1);
-        accountDTOS.add(accountDTO2);
-
-        when(accountService.getAllAccounts(principal)).thenReturn(accountDTOS);
-        List<AccountDTO> accounts = accountService.getAllAccounts(principal);
-        assertEquals(3, accounts.size());
-    }
+//    @Test
+//    public void getAccountsTest() {
+//
+//        List<AccountDTO> accountDTOS = new ArrayList<>();
+//        AccountDTO accountDTO = new AccountDTO().setAmount(242.4).setDetails("dfd").setName("fs");
+//        AccountDTO accountDTO1 = new AccountDTO().setAmount(242.4).setDetails("ddgfd").setName("ffs");
+//        AccountDTO accountDTO2 = new AccountDTO().setAmount(242.4).setDetails("dfhd").setName("fffs");
+//
+//        accountDTOS.add(accountDTO);
+//        accountDTOS.add(accountDTO1);
+//        accountDTOS.add(accountDTO2);
+//
+//        when(accountService.getAllAccounts(principal)).thenReturn(accountDTOS);
+//        List<AccountDTO> accounts = accountService.getAllAccounts(principal);
+//        assertEquals(3, accounts.size());
+//    }
 
 //    @Test
 //    public void getAccountsPageableTest() throws Exception {

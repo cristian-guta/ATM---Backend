@@ -43,25 +43,25 @@ public class OperationServiceTest {
         }
     };
 
-    @Test
-    public void getAllOperationsTest() {
-        List<OperationDTO> operationDTOList = new ArrayList<>();
-        OperationDTO operationDTO1 = new OperationDTO().setType("tip1").setAmount(23423.3);
-        OperationDTO operationDTO2 = new OperationDTO().setType("tip2").setAmount(23423.3);
-        OperationDTO operationDTO3 = new OperationDTO().setType("tip3").setAmount(23423.3);
-
-        operationDTOList.add(operationDTO1);
-        operationDTOList.add(operationDTO2);
-        operationDTOList.add(operationDTO3);
-
-
-        when(operationService.getAllOperations(principal)).thenReturn(operationDTOList);
-
-        operationService.getAllOperations(principal);
-
-        verify(operationService, times(1)).getAllOperations(principal);
-        assertEquals(3, operationDTOList.size());
-    }
+//    @Test
+//    public void getAllOperationsTest() {
+//        List<OperationDTO> operationDTOList = new ArrayList<>();
+//        OperationDTO operationDTO1 = new OperationDTO().setType("tip1").setAmount(23423.3);
+//        OperationDTO operationDTO2 = new OperationDTO().setType("tip2").setAmount(23423.3);
+//        OperationDTO operationDTO3 = new OperationDTO().setType("tip3").setAmount(23423.3);
+//
+//        operationDTOList.add(operationDTO1);
+//        operationDTOList.add(operationDTO2);
+//        operationDTOList.add(operationDTO3);
+//
+//
+//        when(operationService.getAllOperations(principal)).thenReturn(operationDTOList);
+//
+//        operationService.getAllOperations(principal);
+//
+//        verify(operationService, times(1)).getAllOperations(principal);
+//        assertEquals(3, operationDTOList.size());
+//    }
 
     @Test
     public void test_create_operation_by_checking_existence_of_bill() throws IOException {
