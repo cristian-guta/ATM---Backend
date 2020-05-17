@@ -4,6 +4,7 @@ import com.test.demo.dto.ClientDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +19,11 @@ public class ClientController {
     private ClientService clientService;
 
 
-    //    @PreAuthorize("hasAdmin()")
-    @GetMapping("")
-    public List<ClientDTO> getAll() {
-        return clientService.getAll();
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{page}/{size}")
+    public Page<ClientDTO> getAll(@PathVariable(value="page") int page,
+                                  @PathVariable(value="size") int size) {
+        return clientService.getAll(page, size  );
     }
 
     //    @PreAuthorize("isAuthenticated")

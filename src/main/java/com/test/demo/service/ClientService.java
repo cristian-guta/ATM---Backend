@@ -1,7 +1,9 @@
 package com.test.demo.service;
 
+import com.test.demo.dto.BenefitDTO;
 import com.test.demo.dto.ClientDTO;
 import com.test.demo.dto.ResultDTO;
+import com.test.demo.model.Benefit;
 import com.test.demo.model.Client;
 import com.test.demo.model.Role;
 import com.test.demo.model.Subscription;
@@ -9,17 +11,22 @@ import com.test.demo.repository.ClientRepository;
 import com.test.demo.repository.RoleRepository;
 import com.test.demo.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -96,12 +103,17 @@ public class ClientService {
         return new ClientDTO((clientRepository.findByUsername(principal.getName())));
     }
 
-    public List<ClientDTO> getAll() {
+    public Page<ClientDTO> getAll(int page, int size) {
         log.info("Listing all clients...");
 
-        List<ClientDTO> clients = new ArrayList<>();
-        clientRepository.findAll().forEach(u -> clients.add(new ClientDTO(u)));
-        return clients;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Client> pageResult = clientRepository.findAll(pageRequest);
+
+        List<ClientDTO> clients = pageResult
+                .stream()
+                .map(ClientDTO::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(clients, pageRequest, pageResult.getTotalElements());
     }
 
     public ClientDTO updateClient(Principal principal, Integer id, ClientDTO updatedClient) {

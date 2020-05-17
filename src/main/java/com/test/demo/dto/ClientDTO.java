@@ -5,9 +5,6 @@ import com.test.demo.model.Subscription;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 @Data
 @Accessors(chain = true)
 public class ClientDTO {
@@ -22,7 +19,6 @@ public class ClientDTO {
     private Boolean deactivated;
     private Subscription subscription;
     private SubscriptionDTO subscriptionDTO;
-//    private LocalDate activationDate;
 
     public ClientDTO(Client client) {
         this.id = client.getId();
@@ -34,10 +30,9 @@ public class ClientDTO {
         this.email = client.getEmail();
         this.deactivated = client.getStatus();
         this.subscription = client.getSubscription();
-//        this.activationDate = client.getActivationDate();
     }
 
-    public ClientDTO(String username, String firstName, String lastName, String cnp, String address, String email, SubscriptionDTO subscriptionDTO /*,LocalDate activationDate*/) {
+    public ClientDTO(String username, String firstName, String lastName, String cnp, String address, String email, SubscriptionDTO subscriptionDTO) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,7 +40,6 @@ public class ClientDTO {
         this.address = address;
         this.email = email;
         this.subscriptionDTO = subscriptionDTO;
-//        this.activationDate = activationDate;
     }
 
     public ClientDTO() {
