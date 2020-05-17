@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,25 +45,28 @@ public class OperationServiceTest {
         }
     };
 
-//    @Test
-//    public void getAllOperationsTest() {
-//        List<OperationDTO> operationDTOList = new ArrayList<>();
-//        OperationDTO operationDTO1 = new OperationDTO().setType("tip1").setAmount(23423.3);
-//        OperationDTO operationDTO2 = new OperationDTO().setType("tip2").setAmount(23423.3);
-//        OperationDTO operationDTO3 = new OperationDTO().setType("tip3").setAmount(23423.3);
-//
-//        operationDTOList.add(operationDTO1);
-//        operationDTOList.add(operationDTO2);
-//        operationDTOList.add(operationDTO3);
-//
-//
-//        when(operationService.getAllOperations(principal)).thenReturn(operationDTOList);
-//
-//        operationService.getAllOperations(principal);
-//
-//        verify(operationService, times(1)).getAllOperations(principal);
-//        assertEquals(3, operationDTOList.size());
-//    }
+    @Test
+    public void getAllOperationsTest() {
+        List<OperationDTO> operationDTOList = new ArrayList<>();
+        OperationDTO operationDTO1 = new OperationDTO().setType("tip1").setAmount(23423.3);
+        OperationDTO operationDTO2 = new OperationDTO().setType("tip2").setAmount(23423.3);
+        OperationDTO operationDTO3 = new OperationDTO().setType("tip3").setAmount(23423.3);
+
+        operationDTOList.add(operationDTO1);
+        operationDTOList.add(operationDTO2);
+        operationDTOList.add(operationDTO3);
+
+        Integer pageNo = 0;
+        Integer pageSize = 5;
+
+        Page<OperationDTO> operations = new PageImpl<>(operationDTOList);
+
+        when(operationService.getAllOperations(pageNo, pageSize, principal)).thenReturn(operations);
+
+        assertEquals(3, operations.getNumberOfElements());
+        assertEquals(1, operations.getTotalPages());
+
+    }
 
     @Test
     public void test_create_operation_by_checking_existence_of_bill() throws IOException {

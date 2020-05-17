@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/clients")
@@ -21,12 +20,11 @@ public class ClientController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{page}/{size}")
-    public Page<ClientDTO> getAll(@PathVariable(value="page") int page,
-                                  @PathVariable(value="size") int size) {
-        return clientService.getAll(page, size  );
+    public Page<ClientDTO> getAll(@PathVariable(value = "page") int page,
+                                  @PathVariable(value = "size") int size) {
+        return clientService.getAll(page, size);
     }
 
-    //    @PreAuthorize("isAuthenticated")
     @GetMapping("/current")
     public ClientDTO getCurrentClient(Principal principal) {
         return clientService.getCurrentClient(principal);

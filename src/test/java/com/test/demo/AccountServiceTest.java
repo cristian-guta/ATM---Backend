@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -65,52 +67,36 @@ public class AccountServiceTest {
         verify(accountService, times(1)).createAccount(accountDTO, principal);
     }
 
-//    @Test
-//    public void getAccountsTest() {
-//
-//        List<AccountDTO> accountDTOS = new ArrayList<>();
-//        AccountDTO accountDTO = new AccountDTO().setAmount(242.4).setDetails("dfd").setName("fs");
-//        AccountDTO accountDTO1 = new AccountDTO().setAmount(242.4).setDetails("ddgfd").setName("ffs");
-//        AccountDTO accountDTO2 = new AccountDTO().setAmount(242.4).setDetails("dfhd").setName("fffs");
-//
-//        accountDTOS.add(accountDTO);
-//        accountDTOS.add(accountDTO1);
-//        accountDTOS.add(accountDTO2);
-//
-//        when(accountService.getAllAccounts(principal)).thenReturn(accountDTOS);
-//        List<AccountDTO> accounts = accountService.getAllAccounts(principal);
-//        assertEquals(3, accounts.size());
-//    }
+    @Test
+    public void getAccountsPageableTest() throws Exception {
+        AccountDTO account = new AccountDTO();
+        account.setId(10);
+        account.setName("TestName");
+        account.setDetails("TestDetails");
+        account.setAmount(234.3);
+        account.setClient(clientRepository.findByUsername("user"));
 
-//    @Test
-//    public void getAccountsPageableTest() throws Exception {
-//        Account account = new Account();
-//        account.setId(10);
-//        account.setName("TestName");
-//        account.setDetails("TestDetails");
-//        account.setAmount(234.3);
-//        account.setClient(clientRepository.findByUsername("user"));
-//
-//        Account account2 = new Account();
-//        account2.setId(11);
-//        account2.setName("TestName2");
-//        account2.setDetails("TestDetails2");
-//        account2.setAmount(234.32);
-//        account2.setClient(clientRepository.findByUsername("user"));
-//
-//        Integer pageNo = 0;
-//        Integer pageSize = 5;
-//        String sortBy = "a";
-//
-//        List<Account> accountList = new ArrayList<>();
-//        accountList.add(account);
-//        accountList.add(account2);
-//
-////        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-////        Page<Account> accounts = new PageImpl<>(accountList);
-//
-//        when(accountService.getAllAccounts(pageNo, pageSize, sortBy)).thenReturn(accountList);
-//    }
+        AccountDTO account2 = new AccountDTO();
+        account2.setId(11);
+        account2.setName("TestName2");
+        account2.setDetails("TestDetails2");
+        account2.setAmount(234.32);
+        account2.setClient(clientRepository.findByUsername("user"));
+
+        Integer pageNo = 0;
+        Integer pageSize = 5;
+
+        List<AccountDTO> accountList = new ArrayList<>();
+        accountList.add(account);
+        accountList.add(account2);
+
+        Page<AccountDTO> accounts = new PageImpl<>(accountList);
+
+        when(accountService.getAllAccounts(pageNo, pageSize)).thenReturn(accounts);
+
+        assertEquals(2, accounts.getNumberOfElements());
+        assertEquals(1, accounts.getTotalPages());
+    }
 
     @Test
     public void deleteAccount() {

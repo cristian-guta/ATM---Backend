@@ -3,7 +3,6 @@ package com.test.demo;
 import com.test.demo.dto.ClientDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.dto.SubscriptionDTO;
-import com.test.demo.service.ClientService;
 import com.test.demo.service.SubscriptionService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +34,6 @@ public class SubscriptionServiceTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-
-    @Autowired
-    private ClientService clientService;
 
     private MockMvc mockMvc;
 
