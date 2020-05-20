@@ -4,8 +4,10 @@ import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
+import com.test.demo.model.Operation;
 import com.test.demo.repository.AccountRepository;
 import com.test.demo.repository.ClientRepository;
+import com.test.demo.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,13 +29,15 @@ public class AccountService {
     private AccountRepository accountRepository;
     private ClientRepository clientRepository;
     private OperationService operationService;
+    private OperationRepository operationRepository;
     private Logger log = Logger.getLogger(AccountService.class.getName());
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, OperationService operationService) {
+    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, OperationService operationService, OperationRepository operationRepository) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
         this.operationService = operationService;
+        this.operationRepository = operationRepository;
     }
 
     public void seedAccounts() {
@@ -96,8 +100,16 @@ public class AccountService {
         log.info("Deleting account...");
 
         Account deleteAccount = accountRepository.findAccountById(id);
+
         if (deleteAccount != null) {
+            Client client = deleteAccount.getClient();
+            List<Operation> operations = operationRepository.getOperationsByClientId(client.getId());
+            for (Operation op: operations
+                 ) {
+                operationRepository.delete(op);
+            }
             accountRepository.deleteAccountById(id);
+
             log.info("Account deleted...");
             return new ResultDTO().setStatus(true).setMessage("Account deleted!");
         } else {
