@@ -111,6 +111,8 @@ public class SubscriptionService {
         LocalDate date = LocalDate.now();
         Subscription subscription = subscriptionRepository.getById(subId);
         Client client = clientRepository.findByUsername(principal.getName());
+
+
         client.setSubscription(subscription);
 
         AccountDTO account = accountRepository.findAccountByClient_Cnp(client.getCnp());
@@ -119,9 +121,9 @@ public class SubscriptionService {
         log.info("Processing payment...");
 
         Double price = subscription.getPrice();
-        Double amount = account.getAmount();
+        Double amount = acc.getAmount();
         amount -= price;
-        account.setAmount(amount);
+        acc.setAmount(amount);
 
         clientRepository.save(client);
         accountRepository.save(acc);
