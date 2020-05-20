@@ -122,6 +122,9 @@ public class SubscriptionService {
 
         Double price = subscription.getPrice();
         Double amount = acc.getAmount();
+        if(amount<price){
+            throw new RuntimeException("Not enough funds!");
+        }
         amount -= price;
         acc.setAmount(amount);
 
