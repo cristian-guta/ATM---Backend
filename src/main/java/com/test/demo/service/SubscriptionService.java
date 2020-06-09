@@ -50,7 +50,7 @@ public class SubscriptionService {
     }
 
     public void seedSubscriptions() {
-        seedSubscription(1, "Abonament 1", 33.4, randomizeBenefits(), false);
+//        seedSubscription(1, "Abonament 1", 33.4, randomizeBenefits(), false);
         seedSubscription(2, "Abonament 2", 335.4, randomizeBenefits(), false);
 
     }
@@ -77,11 +77,7 @@ public class SubscriptionService {
                     .setId(sub.getId())
                     .setName(sub.getName())
                     .setPrice(sub.getPrice())
-//                    .setDeleted(sub.getDeleted())
                     .setBenefits(sub.getBenefits());
-//            if (!subs.getDeleted()) {
-//                allSubscribtions.add(subs);
-//            }
             allSubscribtions.add(subs);
         }
         return allSubscribtions;
@@ -112,7 +108,6 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.getById(subId);
         Client client = clientRepository.findByUsername(principal.getName());
 
-
         client.setSubscription(subscription);
 
         AccountDTO account = accountRepository.findAccountByClient_Cnp(client.getCnp());
@@ -122,7 +117,7 @@ public class SubscriptionService {
 
         Double price = subscription.getPrice();
         Double amount = acc.getAmount();
-        if(amount<price){
+        if (amount < price) {
             throw new RuntimeException("Not enough funds!");
         }
         amount -= price;
@@ -165,21 +160,11 @@ public class SubscriptionService {
 
     }
 
-    //deleting subscription and letting it active for users who are still subscribed to it
-//    public ResultDTO deleteSubscription(int id, Principal principal) {
-//        log.info("Deleting subscription...");
-//
-//        subscriptionRepository.deleteSubscriptionById(id);
-//        return new ResultDTO().setStatus(true).setMessage("Subscription deleted.");
-//    }
-
-//deleting subscription and automatically deactivating it from the users subscribed to it
-
     public ResultDTO deleteSubscription(int id, Principal principal) {
 
         for (Client client : clientRepository.findAll()) {
 
-            if(client.getSubscription() != null && client.getSubscription().getId() == id) {
+            if (client.getSubscription() != null && client.getSubscription().getId() == id) {
                 client.setSubscription(null);
                 clientRepository.save(client);
             }

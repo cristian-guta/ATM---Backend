@@ -58,6 +58,10 @@ public class AccountService {
         }
     }
 
+    public List<Account> getAllAccountsUnpaged(){
+        return accountRepository.findAll();
+    }
+
     public Page<AccountDTO> getAllAccounts(int page, int size) {
 
         log.info("Listing ALL accounts...");

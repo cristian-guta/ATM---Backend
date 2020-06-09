@@ -41,11 +41,6 @@ public class AccountServiceTest {
         }
     };
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     public void addAccountTest() {
 

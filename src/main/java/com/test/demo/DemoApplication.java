@@ -12,6 +12,7 @@ public class DemoApplication {
 
 
     public static void main(String[] args) {
+        
         log.info("Starting spring boot application...");
         SpringApplication.run(DemoApplication.class, args);
     }

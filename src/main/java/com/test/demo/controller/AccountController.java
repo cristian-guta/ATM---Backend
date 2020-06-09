@@ -2,7 +2,9 @@ package com.test.demo.controller;
 
 import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
+import com.test.demo.model.Account;
 import com.test.demo.service.AccountService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,29 +12,36 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
 
+@Data
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    @Autowired
+
     private AccountService accountService;
 
+    @Autowired
+    public AccountController(AccountService accountService){
+        this.accountService = accountService;
+    }
+
     @GetMapping("")
-    public AccountDTO getAccountsByCnp(Principal principal) {
+    @ResponseBody
+    public AccountDTO getAccountByCnp(Principal principal) {
         return accountService.getAccountByClientCnp(principal);
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public AccountDTO getAccountById(@PathVariable(value = "id") int id) {
         return accountService.getAccountById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllAccounts/{page}/{size}")
-    public Page<AccountDTO> getAllAccounts(@PathVariable(value="page") int page,
-                                           @PathVariable(value="size") int size) {
+    public Page<AccountDTO> getAllAccounts(@PathVariable(value = "page") int page,
+                                           @PathVariable(value = "size") int size) {
         return accountService.getAllAccounts(page, size);
     }
 

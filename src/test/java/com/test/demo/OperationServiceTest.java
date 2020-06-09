@@ -4,9 +4,11 @@ package com.test.demo;
 import com.test.demo.dto.OperationDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.service.OperationService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +46,7 @@ public class OperationServiceTest {
             return "user";
         }
     };
+
 
     @Test
     public void getAllOperationsTest() {
