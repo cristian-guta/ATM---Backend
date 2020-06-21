@@ -3,6 +3,7 @@ package com.test.demo.controller;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.dto.SubscriptionDTO;
 import com.test.demo.service.SubscriptionService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,18 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
-
+@Data
 @RestController
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
-    @Autowired
+
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    public SubscriptionController(SubscriptionService subscriptionService){
+        this.subscriptionService = subscriptionService;
+    }
 
     @PreAuthorize("permitAll()")
     @GetMapping("")

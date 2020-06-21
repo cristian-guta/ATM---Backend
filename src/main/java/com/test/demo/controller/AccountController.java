@@ -2,7 +2,6 @@ package com.test.demo.controller;
 
 import com.test.demo.dto.AccountDTO;
 import com.test.demo.dto.ResultDTO;
-import com.test.demo.model.Account;
 import com.test.demo.service.AccountService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class AccountController {
     private AccountService accountService;
 
     @Autowired
-    public AccountController(AccountService accountService){
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
@@ -33,7 +32,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
+//    @ResponseBody
     public AccountDTO getAccountById(@PathVariable(value = "id") int id) {
         return accountService.getAccountById(id);
     }
@@ -45,7 +44,7 @@ public class AccountController {
         return accountService.getAllAccounts(page, size);
     }
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create")
     public AccountDTO createAccount(@RequestBody AccountDTO newAccount, Principal principal) {
         return accountService.createAccount(newAccount, principal);
     }
