@@ -1,7 +1,10 @@
 package com.test.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @Entity
 @Table(name = "operations")
+@Getter
+@Setter
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

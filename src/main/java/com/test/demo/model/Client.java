@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
 
+@Audited
 @Data
 @Accessors(chain = true)
 @Entity
@@ -23,7 +25,7 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
+//    @NotNull
     private String username;
 
     @NotNull
@@ -32,7 +34,10 @@ public class Client implements Serializable {
     @NotNull
     private String lastName;
 
-    @NotNull
+//    @NotNull
+//    private String name;
+
+//    @NotNull
     private String cnp;
 
     private String address;
@@ -40,12 +45,17 @@ public class Client implements Serializable {
     @NotNull
     private String email;
 
-    @JsonIgnore
+//    @JsonIgnore
     private String password;
 
     @NotNull
     private Boolean status = false;
 
+//    @NotNull
+//    @Enumerated(EnumType.STRING)
+//    private AuthProvider authProvider;
+
+    @NotAudited
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -57,5 +67,10 @@ public class Client implements Serializable {
 
     public Client() {
     }
+//
+//    @Transient
+//    public String getFullName() {
+//        return this.firstName + " " + this.lastName;
+//    }
 
 }

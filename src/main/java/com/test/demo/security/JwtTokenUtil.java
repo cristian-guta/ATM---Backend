@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class JwtTokenUtil {
     public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
 
-    @Value("${jwt.secret}")
+    @Value("${jwt:secret}")
     private String secret;
 
     @Autowired
@@ -78,4 +78,9 @@ public class JwtTokenUtil {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public String getEmailFromToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
+
 }

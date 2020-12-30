@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
+
 @RestController
 @PreAuthorize("isAnonymous()")
 @RequestMapping("/api/auth")
@@ -25,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody ClientDTO client) {
+    public ResponseEntity<?> register(@RequestBody ClientDTO client) throws SQLException {
         return ResponseEntity.ok(userDetailsService.save(client));
     }
 
@@ -33,4 +35,5 @@ public class AuthenticationController {
     public ResponseEntity<?> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
         return ResponseEntity.ok(userDetailsService.handleLogin(authenticationRequest));
     }
+
 }

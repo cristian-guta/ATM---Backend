@@ -1,11 +1,10 @@
 package com.test.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.test.demo.model.Account;
 import com.test.demo.model.Client;
 import com.test.demo.model.Operation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
@@ -14,6 +13,9 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class OperationDTO {
     private int id;
     private String type;

@@ -107,5 +107,7 @@ public class AccountControllerMockitoTest {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/api/accounts/create")
                 .content(requestJson))
                 .andExpect(status().isOk());
+
+
     }
 }

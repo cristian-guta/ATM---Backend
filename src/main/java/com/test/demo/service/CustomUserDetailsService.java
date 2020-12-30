@@ -51,7 +51,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws ResponseStatusException {
         log.info("Loading user by username...");
+
         Client client = clientRepository.findByUsername(username);
+
         if (client == null) {
             log.info("User not found...");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with username: " + username);
@@ -89,7 +91,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public JwtResponse handleLogin(JwtRequest authenticationRequest) throws Exception {
-        log.info("Authenticating process...");
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService

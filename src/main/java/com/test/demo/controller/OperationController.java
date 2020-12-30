@@ -18,6 +18,7 @@ public class OperationController {
     @Autowired
     private OperationService operationService;
 
+
     @GetMapping("/{page}/{size}")
     public Page<OperationDTO> getAll(@PathVariable(value = "page") int page,
                                      @PathVariable(value = "size") int size,

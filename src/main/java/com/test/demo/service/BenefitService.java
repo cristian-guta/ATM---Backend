@@ -1,13 +1,13 @@
 package com.test.demo.service;
 
 import com.test.demo.dto.BenefitDTO;
+import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Benefit;
 import com.test.demo.repository.BenefitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -44,8 +44,8 @@ public class BenefitService {
         }
     }
 
-    public List<BenefitDTO> getAllBenefits(){
-                List<BenefitDTO> benefits = new ArrayList<>();
+    public List<BenefitDTO> getAllBenefits() {
+        List<BenefitDTO> benefits = new ArrayList<>();
         for (Benefit ben : benefitRepository.findAll()) {
             BenefitDTO bnf = new BenefitDTO()
                     .setId(ben.getId())
@@ -80,5 +80,28 @@ public class BenefitService {
             benefits.add(ben);
         });
         return benefits.stream().distinct().collect(Collectors.toList());
+    }
+
+    public BenefitDTO createBenefit(BenefitDTO benefitDTO) {
+        Benefit benefit = new Benefit()
+                .setId(benefitDTO.getId())
+                .setDescription(benefitDTO.getDescription());
+
+        return new BenefitDTO(benefitRepository.save(benefit));
+    }
+
+    public ResultDTO deleteBenefit(int id) {
+        benefitRepository.deleteById(id);
+        return new ResultDTO().setStatus(true).setMessage("Benefit deleted.");
+    }
+
+    public BenefitDTO updateBenefit(int benefitId, BenefitDTO benefitDTO) {
+        Benefit benefit = benefitRepository.getById(benefitId);
+
+        benefit.setDescription(benefitDTO.getDescription());
+
+        benefitRepository.save(benefit);
+
+        return new BenefitDTO(benefit);
     }
 }

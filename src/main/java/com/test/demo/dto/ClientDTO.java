@@ -1,5 +1,6 @@
 package com.test.demo.dto;
 
+import com.test.demo.model.AuthProvider;
 import com.test.demo.model.Client;
 import com.test.demo.model.Subscription;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class ClientDTO {
     private String address;
     private String email;
     private String password;
+    private AuthProvider authProvider;
     private Boolean deactivated;
     private Subscription subscription;
     private SubscriptionDTO subscriptionDTO;
@@ -28,17 +30,19 @@ public class ClientDTO {
         this.cnp = client.getCnp();
         this.address = client.getAddress();
         this.email = client.getEmail();
+//        this.authProvider = client.getAuthProvider();
         this.deactivated = client.getStatus();
         this.subscription = client.getSubscription();
     }
 
-    public ClientDTO(String username, String firstName, String lastName, String cnp, String address, String email, SubscriptionDTO subscriptionDTO) {
+    public ClientDTO(String username, String firstName, String lastName, String cnp, String address, String email,SubscriptionDTO subscriptionDTO) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.cnp = cnp;
         this.address = address;
         this.email = email;
+//        this.authProvider = authProvider;
         this.subscriptionDTO = subscriptionDTO;
     }
 

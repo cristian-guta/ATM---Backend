@@ -19,4 +19,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     @Query("select c from Client c where c.cnp = ?1")
     Client findClientByCnp(String cnp);
 
+    @Query("select c from Client c where c.email = ?1")
+    Client findClientByEmail(String email);
+
 }
