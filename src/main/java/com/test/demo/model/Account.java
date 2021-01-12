@@ -2,6 +2,8 @@ package com.test.demo.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,6 +29,7 @@ public class Account {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Client client;
 
     public Account() {

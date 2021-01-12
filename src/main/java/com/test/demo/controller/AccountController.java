@@ -27,12 +27,11 @@ public class AccountController {
 
     @GetMapping("")
     @ResponseBody
-    public AccountDTO getAccountByCnp(Principal principal) {
-        return accountService.getAccountByClientCnp(principal);
+    public AccountDTO getAccountByClient_id(Principal principal) {
+        return accountService.getAccountByClientId(principal);
     }
 
     @GetMapping("/{id}")
-//    @ResponseBody
     public AccountDTO getAccountById(@PathVariable(value = "id") int id) {
         return accountService.getAccountById(id);
     }

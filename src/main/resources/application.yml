@@ -1,0 +1,32 @@
+jwt:
+  secret: randomsecret
+
+secretPsw: kasdjhfkadhsY776ggTyUU65khaskdjfhYuHAwjñlji
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:
+            client-secret:
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    serialization.FAIL_ON_EMPTY_BEANS: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/clientdb?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: pacutu.98
+    platform: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+app:
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:8080/oauth2/redirect

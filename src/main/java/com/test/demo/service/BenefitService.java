@@ -3,7 +3,10 @@ package com.test.demo.service;
 import com.test.demo.dto.BenefitDTO;
 import com.test.demo.dto.ResultDTO;
 import com.test.demo.model.Benefit;
+import com.test.demo.model.Client;
+import com.test.demo.model.Subscription;
 import com.test.demo.repository.BenefitRepository;
+import com.test.demo.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,10 +24,12 @@ public class BenefitService {
 
     private BenefitRepository benefitRepository;
     private Logger log = Logger.getLogger(BenefitService.class.getName());
+    private ClientRepository clientRepository;
 
     @Autowired
-    public BenefitService(BenefitRepository benefitRepository) {
+    public BenefitService(BenefitRepository benefitRepository, ClientRepository clientRepository) {
         this.benefitRepository = benefitRepository;
+        this.clientRepository = clientRepository;
     }
 
     public void seedBenefits() {
@@ -61,6 +66,24 @@ public class BenefitService {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Benefit> pageResult = benefitRepository.findAll(pageRequest);
+        List<BenefitDTO> benefits = pageResult
+                .stream()
+                .map(BenefitDTO::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(benefits, pageRequest, pageResult.getTotalElements());
+    }
+
+    public Page<BenefitDTO> getAllUSerBenefitsPaged(int page, int size, Principal principal) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Client client = new Client();
+        if (clientRepository.findByUsername(principal.getName()) == null) {
+            client = clientRepository.findClientByEmail(principal.getName());
+        } else {
+            client = clientRepository.findByUsername(principal.getName());
+        }
+        Subscription subscription = client.getSubscription();
+        Page<Benefit> pageResult = benefitRepository.findPagedBySubId(subscription.getId(), pageRequest);
         List<BenefitDTO> benefits = pageResult
                 .stream()
                 .map(BenefitDTO::new)

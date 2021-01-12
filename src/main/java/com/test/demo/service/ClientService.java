@@ -1,9 +1,7 @@
 package com.test.demo.service;
 
-import com.test.demo.dto.BenefitDTO;
 import com.test.demo.dto.ClientDTO;
 import com.test.demo.dto.ResultDTO;
-import com.test.demo.model.Benefit;
 import com.test.demo.model.Client;
 import com.test.demo.model.Role;
 import com.test.demo.model.Subscription;
@@ -16,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -99,8 +98,11 @@ public class ClientService {
 
     public ClientDTO getCurrentClient(Principal principal) {
         log.info("Fetching current client...");
-
-        return new ClientDTO((clientRepository.findByUsername(principal.getName())));
+        if (clientRepository.findByUsername(principal.getName()) == null) {
+            return new ClientDTO(clientRepository.findClientByEmail(principal.getName()));
+        } else {
+            return new ClientDTO(clientRepository.findByUsername(principal.getName()));
+        }
     }
 
     public Page<ClientDTO> getAll(int page, int size) {
@@ -120,9 +122,16 @@ public class ClientService {
         log.info("Updating client's informations...");
 
         Client reqClient = clientRepository.findById(id).get();
-        Client currentClient = clientRepository.findByUsername(principal.getName());
+        Client currentClient = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            currentClient = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            currentClient = clientRepository.findByUsername(principal.getName());
+        }
         if (reqClient != null && reqClient.getId() == currentClient.getId()) {
             currentClient.setAddress(updatedClient.getAddress());
+            currentClient.setUsername(updatedClient.getUsername());
             currentClient.setFirstName(updatedClient.getFirstName());
             currentClient.setLastName(updatedClient.getLastName());
             currentClient.setEmail(updatedClient.getEmail());

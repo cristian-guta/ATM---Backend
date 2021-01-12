@@ -1,19 +1,16 @@
 package com.test.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Audited
 @Data
 @Accessors(chain = true)
 @Entity
@@ -25,19 +22,19 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @NotNull
+    //    @NotNull
     private String username;
 
-    @NotNull
+    //    @NotNull
     private String firstName;
 
-    @NotNull
+    //    @NotNull
     private String lastName;
 
 //    @NotNull
 //    private String name;
 
-//    @NotNull
+    //    @NotNull
     private String cnp;
 
     private String address;
@@ -45,15 +42,17 @@ public class Client implements Serializable {
     @NotNull
     private String email;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String password;
 
-    @NotNull
+    //    @NotNull
     private Boolean status = false;
 
-//    @NotNull
-//    @Enumerated(EnumType.STRING)
-//    private AuthProvider authProvider;
+    private boolean hasUpdated = false;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     @NotAudited
     @ManyToOne(fetch = FetchType.EAGER)
@@ -67,10 +66,5 @@ public class Client implements Serializable {
 
     public Client() {
     }
-//
-//    @Transient
-//    public String getFullName() {
-//        return this.firstName + " " + this.lastName;
-//    }
 
 }

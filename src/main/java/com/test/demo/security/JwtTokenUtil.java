@@ -54,7 +54,12 @@ public class JwtTokenUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        Client client = clientRepository.findByUsername(userDetails.getUsername());
+        Client client = new Client();
+        if (clientRepository.findByUsername(userDetails.getUsername()) == null) {
+            client = clientRepository.findClientByEmail(userDetails.getUsername());
+        } else {
+            client = clientRepository.findByUsername(userDetails.getUsername());
+        }
         String role = client.getRole().getName();
         claims.put("clientId", client.getId());
         claims.put("username", client.getUsername());
@@ -80,7 +85,8 @@ public class JwtTokenUtil {
     }
 
     public String getEmailFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+//        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return getClaimFromToken(token, Claims::getSubject);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.test.demo.security;
 
 import com.test.demo.service.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,16 +70,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**").permitAll()
+//                .antMatchers("/api/oauth/**").permitAll()
                 .antMatchers("/api/**").permitAll()
 //                .antMatchers("/api/auth/register", "/api/auth/login").permitAll()
 //                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
                 .and()
-//                .oauth2Login()
-//                    .authorizedClientService(userDetailsServiceImpl)
-//                .and()
+                .oauth2Login()
+
+                .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
@@ -93,4 +95,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

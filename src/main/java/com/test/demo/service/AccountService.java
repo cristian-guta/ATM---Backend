@@ -77,18 +77,31 @@ public class AccountService {
     }
 
 
-    public AccountDTO getAccountByClientCnp(Principal principal) {
-        log.info("Listing client's account based on his CNP...");
+    public AccountDTO getAccountByClientId(Principal principal) {
+        log.info("Listing client's account based on his ID...");
 
-        Client client = clientRepository.findByUsername(principal.getName());
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
 
-        return accountRepository.findAccountByClient_Cnp(client.getCnp());
+        return accountRepository.findAccountByClient_Id(client.getId());
     }
 
     public AccountDTO createAccount(@RequestBody AccountDTO account, Principal principal) {
         log.info("Creating account...");
 
-        Client client = clientRepository.findByUsername(principal.getName());
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
+
         Account newAccount = new Account()
                 .setAmount(account.getAmount())
                 .setName(account.getName())
@@ -107,11 +120,18 @@ public class AccountService {
 
         if (deleteAccount != null) {
             Client client = deleteAccount.getClient();
-            List<Operation> operations = operationRepository.getOperationsByClientId(client.getId());
-            for (Operation op: operations
-                 ) {
-                operationRepository.delete(op);
-            }
+            AccountDTO acc = accountRepository.findAccountByClient_Id(client.getId());
+            Account account = new Account()
+                    .setId(acc.getId())
+                    .setAmount(acc.getAmount())
+                    .setClient(acc.getClient())
+                    .setDetails(acc.getDetails());
+            account.setClient(null);
+//            List<Operation> operations = operationRepository.getOperationsByClientId(client.getId());
+//            for (Operation op: operations
+//                 ) {
+//                operationRepository.delete(op);
+//            }
             accountRepository.deleteAccountById(id);
 
             log.info("Account deleted...");

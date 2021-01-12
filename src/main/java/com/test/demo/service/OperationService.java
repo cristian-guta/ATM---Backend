@@ -52,10 +52,18 @@ public class OperationService {
     public Page<OperationDTO> getAllOperations(int page, int size, Principal principal) {
         log.info("Listing operations...");
         PageRequest pageRequest = PageRequest.of(page, size);
-        Client client = clientRepository.findByUsername(principal.getName());
+
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
+
         Page<Operation> pageResult;
 
-        if (!client.getUsername().equals("admin")) {
+        if (!client.getRole().getName().equals("ADMIN")) {
             log.info("User is not admin, fetching personal operations...");
             pageResult = operationRepository.findByClient_Id(client.getId(), pageRequest);
         } else {
@@ -73,16 +81,23 @@ public class OperationService {
     }
 
     public OperationDTO createOperation(Principal principal, int accountId, int transferId, String type, Double amount) throws IOException {
-        log.info("New operation...");
-        log.info("Set up transaction details...");
 
         LocalDate date = LocalDate.now();
         Account account = accountRepository.findAccountById(accountId);
-        Client client = clientRepository.findByUsername(principal.getName());
+
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
+
         Operation operation = new Operation()
                 .setAmount(amount)
                 .setDate(date)
                 .setType(type)
+                .setAccount(account)
                 .setClient(client);
         if (transferId != 0) {
 

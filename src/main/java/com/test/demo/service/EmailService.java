@@ -72,7 +72,15 @@ public class EmailService {
         document.add(paragraph1);
 
         log.info("Fetching client...");
-        Client client = clientRepository.findByUsername(principal.getName());
+
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
+
         Account account = operation.getAccount();
 
 

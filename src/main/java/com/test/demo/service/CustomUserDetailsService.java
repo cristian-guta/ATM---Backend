@@ -52,7 +52,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws ResponseStatusException {
         log.info("Loading user by username...");
 
-        Client client = clientRepository.findByUsername(username);
+        Client client = new Client();
+
+        if (clientRepository.findByUsername(username) == null) {
+            client = clientRepository.findClientByEmail(username);
+        } else {
+            client = clientRepository.findByUsername(username);
+        }
 
         if (client == null) {
             log.info("User not found...");
@@ -62,8 +68,13 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials!");
         }
         log.info("Loading...");
-        return new org.springframework.security.core.userdetails.User(client.getUsername(), client.getPassword(),
-                getAuthority(client));
+        if (client.getUsername() != null) {
+            return new org.springframework.security.core.userdetails.User(client.getUsername(), client.getPassword(),
+                    getAuthority(client));
+        } else {
+            return new org.springframework.security.core.userdetails.User(client.getEmail(), client.getPassword(),
+                    getAuthority(client));
+        }
     }
 
     private List<SimpleGrantedAuthority> getAuthority(Client client) {

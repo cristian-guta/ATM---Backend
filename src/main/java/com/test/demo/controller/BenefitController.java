@@ -25,6 +25,12 @@ public class BenefitController {
         return benefitService.getAllBenefitsPaged(page, size);
     }
 
+    @GetMapping("/user/{page}/{size}")
+    public Page<BenefitDTO> getAllUserBenefitsPaged(@PathVariable(value = "page") int page,
+                                                    @PathVariable(value = "size") int size, Principal principal) {
+        return benefitService.getAllUSerBenefitsPaged(page, size, principal);
+    }
+
     @GetMapping("/unpagedBenefits")
     public List<BenefitDTO> getAllBenefits() {
         return benefitService.getAllBenefits();

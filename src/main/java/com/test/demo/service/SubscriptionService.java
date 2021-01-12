@@ -86,7 +86,14 @@ public class SubscriptionService {
     public SubscriptionDTO getClientSubscription(Principal principal) {
         log.info("Fetching client's subscription");
 
-        Client client = clientRepository.findByUsername(principal.getName());
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
+
         Subscription subscription = client.getSubscription();
         if (subscription != null && client.getUsername() != "admin") {
             SubscriptionDTO sub = new SubscriptionDTO()
@@ -106,7 +113,14 @@ public class SubscriptionService {
         log.info("Activating subscription for " + principal.getName() + "...");
         LocalDate date = LocalDate.now();
         Subscription subscription = subscriptionRepository.getById(subId);
-        Client client = clientRepository.findByUsername(principal.getName());
+
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
 
         client.setSubscription(subscription);
 
@@ -136,7 +150,13 @@ public class SubscriptionService {
 
     public ResultDTO cancelSubscription(Principal principal) {
 
-        Client client = clientRepository.findByUsername(principal.getName());
+        Client client = new Client();
+        if(clientRepository.findByUsername(principal.getName()) == null){
+            client = clientRepository.findClientByEmail(principal.getName());
+        }
+        else{
+            client = clientRepository.findByUsername(principal.getName());
+        }
 
         log.info("Canceling subscription for ..." + client.getFirstName() + " " + client.getLastName() + "...");
         client.setSubscription(null);
