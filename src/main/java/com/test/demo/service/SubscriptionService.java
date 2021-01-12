@@ -95,7 +95,7 @@ public class SubscriptionService {
         }
 
         Subscription subscription = new Subscription();
-        if (client.getSubscription() != null && !client.getUsername().equals("admin")) {
+        if (client.getSubscription() != null && client.getUsername()!="admin") {
             subscription = client.getSubscription();
             SubscriptionDTO sub = new SubscriptionDTO()
                     .setId(subscription.getId())
