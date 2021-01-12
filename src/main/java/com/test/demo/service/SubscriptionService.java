@@ -94,8 +94,9 @@ public class SubscriptionService {
             client = clientRepository.findByUsername(principal.getName());
         }
 
-        Subscription subscription = client.getSubscription();
-        if (subscription != null && client.getUsername() != "admin") {
+        Subscription subscription = new Subscription();
+        if (client.getSubscription() != null && !client.getUsername().equals("admin")) {
+            subscription = client.getSubscription();
             SubscriptionDTO sub = new SubscriptionDTO()
                     .setId(subscription.getId())
                     .setName(subscription.getName())
@@ -105,7 +106,8 @@ public class SubscriptionService {
             return sub;
         } else {
             log.info("Something went wrong while executing getClientSubscription(...) method...");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No subscription active or current user is admin!");
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No subscription active or current user is admin!");
+            return new SubscriptionDTO();
         }
     }
 
