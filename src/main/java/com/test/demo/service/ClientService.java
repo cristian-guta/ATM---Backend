@@ -115,6 +115,15 @@ public class ClientService {
                 .stream()
                 .map(ClientDTO::new)
                 .collect(Collectors.toList());
+
+        clients.forEach(clientDTO -> {
+            String cnp = new String();
+            for(int i=0; i<clientDTO.getCnp().length()-1; i++){
+                cnp+="*";
+
+            }
+            clientDTO.setCnp(cnp);
+        });
         return new PageImpl<>(clients, pageRequest, pageResult.getTotalElements());
     }
 

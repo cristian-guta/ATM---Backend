@@ -9,8 +9,8 @@ spring:
       client:
         registration:
           google:
-            client-id:
-            client-secret:
+            client-id: 1035830881982-s2er91ab97g2iugtbnsgi1s8c3scde6v.apps.googleusercontent.com
+            client-secret: 9kmkgN04TTo3GvaCXagE0HlW
   main:
     allow-bean-definition-overriding: true
   jackson:
