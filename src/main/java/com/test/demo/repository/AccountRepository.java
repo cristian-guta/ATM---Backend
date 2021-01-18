@@ -10,11 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-
+    
     Account findAccountsByName(String name);
 
     AccountDTO findAccountByClient_Cnp(String cnp);

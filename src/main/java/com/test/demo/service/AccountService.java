@@ -73,6 +73,14 @@ public class AccountService {
                 .stream()
                 .map(AccountDTO::new)
                 .collect(Collectors.toList());
+
+        accounts.forEach(accountDTO -> {
+            String cnp = new String();
+            for(int i = 0; i<accountDTO.getClient().getCnp().length()-1; i++){
+                cnp+="*";
+            }
+            accountDTO.getClient().setCnp(cnp);
+        });
         return new PageImpl<>(accounts, pageRequest, pageResult.getTotalElements());
     }
 

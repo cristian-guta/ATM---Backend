@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 
 @SpringBootApplication
-public class DemoApplication {
+class DemoApplication {
 
     private static Logger log = Logger.getLogger(DemoApplication.class.getName());
 
@@ -25,8 +25,8 @@ public class DemoApplication {
         log.info("Starting spring boot application...");
         SpringApplication.run(DemoApplication.class, args);
 
-
     }
 
-
 }
+
+

@@ -76,6 +76,14 @@ public class OperationService {
                 .map(OperationDTO::new)
                 .collect(Collectors.toList());
 
+        operations.forEach(operationDTO -> {
+            String cnp = new String();
+            for(int i=0; i<operationDTO.getClient().getCnp().length()-1; i++){
+                cnp+="*";
+            }
+            operationDTO.getClient().setCnp(cnp);
+        });
+
         return new PageImpl<>(operations, pageRequest, pageResult.getTotalElements());
 
     }
